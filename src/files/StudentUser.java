@@ -101,10 +101,7 @@ public class StudentUser {
     public static void main(String[] args) {
         // JOptionPane inputs always returns as string so the parseInt function is required
         int input = Integer.parseInt(displayMenu());
-        
-        while (true) {
-            checkMenuInput(input);
-        }
+        checkMenuInput(input);
         
     }
 }
