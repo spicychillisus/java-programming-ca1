@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 public class StudentUser {
     
     // this method does not have any need to be accessed outside of this class
-    private static String displayMenuText() {
+    private static String displayMenu() {
         // create variables for the menu text
         String header = "Enter your option: \n";
         String options = "1. Display all students\n2. Search student by class\n3. Searh student by name\n4. Quit";
@@ -23,53 +23,82 @@ public class StudentUser {
         return getInput; // display
         
     }
-    
-    // this method does not have any need to be accessed outside of this class
-    private static int checkForValidInput(int input) {
-        int validInteger = 0;
-        boolean isInteger = true;
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 1
+    // gets the information from StudentManagement.java
+    public static String displayAllStudents() {
         
-        // check if the input is within the 
-        try {
-            
-        } catch (NumberFormatException e) {
-            
-        }
-        
-        
-        return validInteger;
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 2
+    // gets the information from StudentManagement.java
+    public static String searchStudentByClass() {
+        String studentClass = JOptionPane.showInputDialog("Enter the class name to search");
+        displayClassSummary(studentClass);
+        return studentClass;
     }
     
-    // this method does not have any need to be accessed outside of this class
-    private static String checkMenuInput(int input) {
+    public static String displayClassSummary(String studentClass) {
         
-        String output = ""; // initialise
+    }
+    
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 3
+    // gets the information from StudentManagement.java
+    public static String searchStudentByName() {
+        
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 4
+    // exits the program
+    public static void quitProgram() {
+        JOptionPane.showMessageDialog(null, "Program terminated.\nThank You!");
+        System.exit(0);
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // DISPLAY ERROR MESSAGE
+    public static void displayError() {
+        String errorMessageText = "Invalid input. Please enter a number from 1 to 4.";
+        JOptionPane.showMessageDialog(null, errorMessageText, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // this method does not have any need to be accessed outside of this class
+    private static void checkMenuInput(int input) {
         
         switch(input) {
             case 1:
-                output = displayAllStudentReport();
+                displayAllStudents();
                 break;
             case 2:
-                output = searchStudentByClass();
+                searchStudentByClass();
                 break;
             case 3:
-                output = searchStudentByName();
+                searchStudentByName();
                 break;
             case 4:
-                output = quitProgram();
+                quitProgram();
+                break;
+            default:
+                displayError();
                 break;
         }
-        
-        return output;
     }
     
     
     
     public static void main(String[] args) {
         // JOptionPane inputs always returns as string so the parseInt function is required
-        int input = Integer.parseInt(displayMenuText());
-        checkMenuInput(input);
+        int input = Integer.parseInt(displayMenu());
         
-        System.out.println(Integer.parseInt("kk"));
+        while (true) {
+            checkMenuInput(input);
+        }
+        
     }
 }
