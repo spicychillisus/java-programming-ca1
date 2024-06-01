@@ -35,13 +35,19 @@ public class StudentUser {
     // OPTION 2
     // gets the information from StudentManagement.java
     public static String searchStudentByClass() {
-        String studentClass = JOptionPane.showInputDialog("Enter the class name to search");
-        displayClassSummary(studentClass);
+        String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
+        //displayClassSummary(studentClass);
+        displayClassSummary("DIT/FT/2B/23");
         return studentClass;
     }
-    
+ 
     public static String displayClassSummary(String studentClass) {
-        
+        // if class exists, display the number of students in the class and average gpa
+        // if class does not exist, display error message
+    }
+    
+    private static void noStudentClass() {
+        JOptionPane.showMessageDialog(null, "No student found from class!");
     }
     
     // -------------------------------------------------------------------------------------
@@ -61,8 +67,8 @@ public class StudentUser {
     }
     // -------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------
-    // DISPLAY ERROR MESSAGE
-    public static void displayError() {
+    // DISPLAY MENU ERROR MESSAGE
+    public static void displayMenuError() {
         String errorMessageText = "Invalid input. Please enter a number from 1 to 4.";
         JOptionPane.showMessageDialog(null, errorMessageText, "Error", JOptionPane.ERROR_MESSAGE);
     }
@@ -85,7 +91,7 @@ public class StudentUser {
                 quitProgram();
                 break;
             default:
-                displayError();
+                displayMenuError();
                 break;
         }
     }
