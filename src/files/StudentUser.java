@@ -8,6 +8,10 @@ package files;
  *
  * @author asher
  */
+import javax.swing.JOptionPane;
+
 public class StudentUser {
-    
+    public static void main(String[] args) {
+        
+    }
 }
