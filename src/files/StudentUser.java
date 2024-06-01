@@ -12,7 +12,8 @@ import javax.swing.JOptionPane;
 
 public class StudentUser {
     
-    public static String displayMenuText() {
+    // this method does not have any need to be accessed outside of this class
+    private static String displayMenuText() {
         // create variables for the menu text
         String header = "Enter your option: \n";
         String options = "1. Display all students\n2. Search student by class\n3. Searh student by name\n4. Quit";
@@ -23,9 +24,26 @@ public class StudentUser {
         
     }
     
-    public static String checkMenuInput(int input) {
+    // this method does not have any need to be accessed outside of this class
+    private static int checkForValidInput(int input) {
+        int validInteger = 0;
+        boolean isInteger = true;
         
-        String output = "";
+        // check if the input is within the 
+        try {
+            
+        } catch (NumberFormatException e) {
+            
+        }
+        
+        
+        return validInteger;
+    }
+    
+    // this method does not have any need to be accessed outside of this class
+    private static String checkMenuInput(int input) {
+        
+        String output = ""; // initialise
         
         switch(input) {
             case 1:
@@ -45,10 +63,13 @@ public class StudentUser {
         return output;
     }
     
+    
+    
     public static void main(String[] args) {
-        
         // JOptionPane inputs always returns as string so the parseInt function is required
         int input = Integer.parseInt(displayMenuText());
         checkMenuInput(input);
+        
+        System.out.println(Integer.parseInt("kk"));
     }
 }
