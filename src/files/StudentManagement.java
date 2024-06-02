@@ -8,6 +8,9 @@ package files;
  *
  * @author asher
  */
+import java.util.*;
+import javax.swing.JOptionPane;
+
 public class StudentManagement {
     /*
     this file is to create the methods to create students, display students, 
@@ -15,4 +18,133 @@ public class StudentManagement {
     
     create 3 student objects and store them in the array
     */
+    
+    
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 1
+    // gets the information from StudentManagement.java
+    public static String displayAllStudents() {
+        // add your code to display:
+        // n = how many students starting with 1 to n students
+        // k = 1 to k modules taken by student
+        /*
+        Student n:
+        Name:
+        Admin:
+        Class:
+        Modules Taken:
+        k. *insert module code* / *insert module name in short form (eg: fundementals of programming short form is FOP) / credit units: grade
+        -----------
+        repeat above
+        */
+        
+    }
+    
+    // if there are no students available
+    public static void noStudentsAvailable() {
+        JOptionPane.showMessageDialog(null, "No students available.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 2
+    // gets the information from StudentManagement.java
+    public static String searchStudentByClass() {
+        String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
+        displayClassSummary(studentClass);
+        return studentClass;
+    }
+ 
+    public static String displayClassSummary(String studentClass) {
+        // if class exists, display the number of students in the class and average gpa
+        // if class does not exist, display error message
+        /*
+        add your code to get the student class that is equal to the class in the studentClass variable
+        */
+    }
+    
+    // this function is to display an error message if the student class cannot be found. please use it.
+    public static void noStudentClass() {
+        JOptionPane.showMessageDialog(null, "No student found from class!");
+    }
+    
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 3
+    // gets the information from StudentManagement.java
+    public static String searchStudentByName() {
+        String studentName = "";
+        studentName = JOptionPane.showInputDialog(null, "Enter the Student name to search: ");
+        // 
+        findStudent(studentName); 
+        return studentName;
+    }
+    
+    public static String findStudent(String studentName) {
+        // to be filled in later on
+    }
+    
+    // to use if student name cannot be found in the system
+    private static void cannotFindStudent(String studentName) {
+        String errorMessage = String.format("Cannot find the student %s", studentName);
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // OPTION 4
+    // exits the program
+    // this method is working. PLEASE DO NOT TOUCH.
+    public static void quitProgram() {
+        JOptionPane.showMessageDialog(null, "Program terminated.\nThank You!");
+        System.exit(0);
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // DISPLAY MENU ERROR MESSAGE
+    // this method is working. PLEASE DO NOT TOUCH.
+    public static void displayMenuError() {
+        String errorMessageText = "Invalid input. Please enter a number from 1 to 4.";
+        JOptionPane.showMessageDialog(null, errorMessageText, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // this method does not have any need to be accessed outside of this class
+    // CODE DONE BY ASHER. DO NOT TOUCH
+    public String displayMenu() {
+        // create variables for the menu text
+        String header = "Enter your option: \n";
+        String options = "1. Display all students\n2. Search student by class\n3. Search student by name\n4. Quit";
+        
+        String menuText = header + options;
+        String getInput = JOptionPane.showInputDialog(null, menuText); 
+        return getInput; // display
+        
+    }
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // this method does not have any need to be accessed outside of this class
+    // this method is working. PLEASE DO NOT TOUCH.
+    public void checkMenuInput(int input) {
+        
+        switch(input) {
+            case 1:
+                displayAllStudents();
+                break;
+            case 2:
+                searchStudentByClass();
+                break;
+            case 3:
+                searchStudentByName();
+                break;
+            case 4:
+                quitProgram();
+                break;
+            default:
+                displayMenuError();
+                break;
+        }
+    }
+    
+    
+    
 }
