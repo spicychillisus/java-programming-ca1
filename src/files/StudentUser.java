@@ -28,6 +28,7 @@ public class StudentUser {
     private static void checkMenuInput(int input) {
         
         StudentManagement sm = new StudentManagement();
+        
         switch(input) {
             case 1:
                 sm.displayAllStudents();
@@ -42,7 +43,11 @@ public class StudentUser {
                 sm.quitProgram();
                 break;
             default:
-                sm.displayMenuError();
+                try {
+                    sm.displayMenuError();
+                } catch (NumberFormatException e) {
+                    sm.displayMenuError();
+                }
                 break;
         }
     }
