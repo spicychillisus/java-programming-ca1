@@ -44,7 +44,7 @@ public class StudentUser {
     }
     
     // if there are no students available
-    private static void noStudentsAvailable() {
+    public static void noStudentsAvailable() {
         JOptionPane.showMessageDialog(null, "No students available.", "Error", JOptionPane.ERROR_MESSAGE);
     }
     // -------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ public class StudentUser {
     }
     
     // this function is to display an error message if the student class cannot be found. please use it.
-    private static void noStudentClass() {
+    public static void noStudentClass() {
         JOptionPane.showMessageDialog(null, "No student found from class!");
     }
     
@@ -82,7 +82,7 @@ public class StudentUser {
         return studentName;
     }
     
-    private static String findStudent(String studentName) {
+    public static String findStudent(String studentName) {
         
     }
     
@@ -136,8 +136,11 @@ public class StudentUser {
     // this method is working. PLEASE DO NOT TOUCH.
     public static void main(String[] args) {
         // JOptionPane inputs always returns as string so the parseInt function is required
-        int input = Integer.parseInt(displayMenu());
-        checkMenuInput(input);
+        while (true) {
+            int input = Integer.parseInt(displayMenu());
+            checkMenuInput(input);
+        }
+        
         
     }
 }

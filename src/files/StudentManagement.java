@@ -9,7 +9,10 @@ package files;
  * @author asher
  */
 public class StudentManagement {
-    public static void main(String[] args) {
-        
-    }
+    /*
+    this file is to create the methods to create students, display students, 
+    search students, search module, print statistics and etc...
+    
+    create 3 student objects and store them in the array
+    */
 }
