@@ -19,12 +19,12 @@ public class StudentManagement {
     create 3 student objects and store them in the array
     */
     
-    
+    // FRONT END CODE TO DISPLAY STUDENTS
     // -------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------
     // OPTION 1
     // gets the information from StudentManagement.java
-    public static String displayAllStudents() {
+    public String displayAllStudents() {
         // add your code to display:
         // n = how many students starting with 1 to n students
         // k = 1 to k modules taken by student
@@ -49,7 +49,7 @@ public class StudentManagement {
     // -------------------------------------------------------------------------------------
     // OPTION 2
     // gets the information from StudentManagement.java
-    public static String searchStudentByClass() {
+    public String searchStudentByClass() {
         String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
         displayClassSummary(studentClass);
         return studentClass;
@@ -72,7 +72,7 @@ public class StudentManagement {
     // -------------------------------------------------------------------------------------
     // OPTION 3
     // gets the information from StudentManagement.java
-    public static String searchStudentByName() {
+    public String searchStudentByName() {
         String studentName = "";
         studentName = JOptionPane.showInputDialog(null, "Enter the Student name to search: ");
         // 
@@ -94,7 +94,7 @@ public class StudentManagement {
     // OPTION 4
     // exits the program
     // this method is working. PLEASE DO NOT TOUCH.
-    public static void quitProgram() {
+    public void quitProgram() {
         JOptionPane.showMessageDialog(null, "Program terminated.\nThank You!");
         System.exit(0);
     }
@@ -102,48 +102,11 @@ public class StudentManagement {
     // -------------------------------------------------------------------------------------
     // DISPLAY MENU ERROR MESSAGE
     // this method is working. PLEASE DO NOT TOUCH.
-    public static void displayMenuError() {
+    public void displayMenuError() {
         String errorMessageText = "Invalid input. Please enter a number from 1 to 4.";
         JOptionPane.showMessageDialog(null, errorMessageText, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // this method does not have any need to be accessed outside of this class
-    // CODE DONE BY ASHER. DO NOT TOUCH
-    public String displayMenu() {
-        // create variables for the menu text
-        String header = "Enter your option: \n";
-        String options = "1. Display all students\n2. Search student by class\n3. Search student by name\n4. Quit";
-        
-        String menuText = header + options;
-        String getInput = JOptionPane.showInputDialog(null, menuText); 
-        return getInput; // display
-        
-    }
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // this method does not have any need to be accessed outside of this class
-    // this method is working. PLEASE DO NOT TOUCH.
-    public void checkMenuInput(int input) {
-        
-        switch(input) {
-            case 1:
-                displayAllStudents();
-                break;
-            case 2:
-                searchStudentByClass();
-                break;
-            case 3:
-                searchStudentByName();
-                break;
-            case 4:
-                quitProgram();
-                break;
-            default:
-                displayMenuError();
-                break;
-        }
-    }
+    
     
     
     

@@ -4,20 +4,56 @@
  */
 package files;
 
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author asher
  */
 
 public class StudentUser {
-    // this method stores only the main class
+    
+    
+    
+    private static String displayMenu() {
+        // create variables for the menu text
+        String header = "Enter your option: \n";
+        String options = "1. Display all students\n2. Search student by class\n3. Search student by name\n4. Quit";
+        
+        String menuText = header + options;
+        String getInput = JOptionPane.showInputDialog(null, menuText); 
+        return getInput; // display
+        
+    }
+    
+    public static void checkMenuInput(int input) {
+        
+        StudentManagement sm = new StudentManagement();
+        switch(input) {
+            case 1:
+                sm.displayAllStudents();
+                break;
+            case 2:
+                sm.searchStudentByClass();
+                break;
+            case 3:
+                sm.searchStudentByName();
+                break;
+            case 4:
+                sm.quitProgram();
+                break;
+            default:
+                sm.displayMenuError();
+                break;
+        }
+    }
     // this method is working. PLEASE DO NOT TOUCH.
     public static void main(String[] args) {
-        StudentManagement sm = new StudentManagement();
         // JOptionPane inputs always returns as string so the parseInt function is required
         while (true) {
-            int input = Integer.parseInt(sm.displayMenu());
-            sm.checkMenuInput(input);
+            int input = Integer.parseInt(displayMenu());
+            checkMenuInput(input);
         }
         
         
