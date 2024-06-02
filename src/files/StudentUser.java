@@ -14,8 +14,6 @@ import javax.swing.JOptionPane;
 
 public class StudentUser {
     
-    
-    
     private static String displayMenu() {
         // create variables for the menu text
         String header = "Enter your option: \n";
@@ -27,7 +25,7 @@ public class StudentUser {
         
     }
     
-    public static void checkMenuInput(int input) {
+    private static void checkMenuInput(int input) {
         
         StudentManagement sm = new StudentManagement();
         switch(input) {
