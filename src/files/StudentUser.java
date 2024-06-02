@@ -42,6 +42,11 @@ public class StudentUser {
         repeat above
         */
     }
+    
+    // if there are no students available
+    private static void noStudentsAvailable() {
+        JOptionPane.showMessageDialog(null, "No students available.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     // -------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------
     // OPTION 2
@@ -79,6 +84,11 @@ public class StudentUser {
     
     private static String findStudent(String studentName) {
         
+    }
+    
+    private static void cannotFindStudent(String studentName) {
+        String errorMessage = String.format("Cannot find the student %s", studentName);
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
     }
     // -------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------
