@@ -14,14 +14,14 @@ import javax.swing.JOptionPane;
 
 public class StudentUser {
     
-    private static String displayMenu() {
+    private static int displayMenu() {
         // create variables for the menu text
         String header = "Enter your option: \n";
         String options = "1. Display all students\n2. Search student by class\n3. Search student by name\n4. Quit";
         
         String menuText = header + options;
         String getInput = JOptionPane.showInputDialog(null, menuText); 
-        return getInput; // display
+        return Integer.parseInt(getInput); // display
         
     }
     
@@ -55,7 +55,7 @@ public class StudentUser {
     public static void main(String[] args) {
         // JOptionPane inputs always returns as string so the parseInt function is required
         while (true) {
-            int input = Integer.parseInt(displayMenu());
+            int input = displayMenu();
             checkMenuInput(input);
         }
         

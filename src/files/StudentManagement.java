@@ -60,7 +60,9 @@ public class StudentManagement {
         // if class does not exist, display error message
         /*
         add your code to get the student class that is equal to the class in the studentClass variable
+        suggestion: get all the students that have the same class parameter or create a method for that
         */
+        
     }
     
     // this function is to display an error message if the student class cannot be found. please use it.
