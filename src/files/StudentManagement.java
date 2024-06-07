@@ -8,108 +8,242 @@ package files;
  *
  * @author asher
  */
-import java.util.*;
+import java.util.ArrayList*;
 import javax.swing.JOptionPane;
 
 public class StudentManagement {
-    /*
-    this file is to create the methods to create students, display students, 
-    search students, search module, print statistics and etc...
-    
-    create 3 student objects and store them in the array
-    */
-    
-    // FRONT END CODE TO DISPLAY STUDENTS
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // OPTION 1
-    // gets the information from StudentManagement.java
-    public String displayAllStudents() {
-        // add your code to display:
-        // n = how many students starting with 1 to n students
-        // k = 1 to k modules taken by student
-        /*
-        Student n:
-        Name:
-        Admin:
-        Class:
-        Modules Taken:
-        k. *insert module code* / *insert module name in short form (eg: fundementals of programming short form is FOP) / credit units: grade
-        -----------
-        repeat above
-        */
+    private ArrayList<Student> students;
+
+    public StudentManagement() {
+        students = new ArrayList<>();
         
+        //member A
+        // Adding dummy student data
+        Student student1 = new Student("A001", "John Doe", "CS101");
+        student1.addModule(new Module("M001", "Fundamentals of Programming", 4, 85));
+        student1.addModule(new Module("M002", "Mathematics I", 3, 78));
+        student1.calculateGPA();
+        students.add(student1);
+
+        Student student2 = new Student("A002", "Jane Smith", "CS101");
+        student2.addModule(new Module("M003", "Data Structures", 4, 90));
+        student2.addModule(new Module("M004", "Computer Architecture", 3, 88));
+        student2.calculateGPA();
+        students.add(student2);
+
+        Student student3 = new Student("A003", "Alice Johnson", "CS102");
+        student3.addModule(new Module("M001", "Fundamentals of Programming", 4, 92));
+        student3.addModule(new Module("M005", "Discrete Mathematics", 3, 81));
+        student3.calculateGPA();
+        students.add(student3);
+    }
+
+    public void displayAllStudents() {
+        if (students.isEmpty()) {
+            noStudentsAvailable();
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+            sb.append("Student ").append(i + 1).append(":\n")
+              .append("Name: ").append(student.getName()).append("\n")
+              .append("Admin: ").append(student.getAdminNumber()).append("\n")
+              .append("Class: ").append(student.getStudentClass()).append("\n")
+              .append("Modules Taken:\n");
+            
+            ArrayList<Module> modules = student.getModules();
+            for (int j = 0; j < modules.size(); j++) {
+                Module module = modules.get(j);
+                sb.append(j + 1).append(". ")
+                  .append(module.getModuleCode()).append(" / ")
+                  .append(module.getModuleName()).append(" / ")
+                  .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+                  .append("Marks: ").append(module.getMarks()).append("\n");
+            }
+            sb.append("-----------\n");
+        }
+
+        JOptionPane.showMessageDialog(null, sb.toString(), "All Students", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void searchStudentByClass() {
+        String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
+        StringBuilder sb = new StringBuilder();
+        int studentCount = 0;
+        double totalGPA = 0.0;
+
+        for (Student student : students) {
+            if (student.getStudentClass().equalsIgnoreCase(studentClass)) {
+                studentCount++;
+                totalGPA += student.getGPA();
+                sb.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n")
+                  .append("-----------\n");
+            }
+        }
+
+        if (studentCount == 0) {
+            noStudentClass();
+            return;
+        }
+
+        double averageGPA = totalGPA / studentCount;
+        sb.append("Number of students in class ").append(studentClass).append(": ").append(studentCount).append("\n")
+          .append("Average GPA: ").append(averageGPA);
+
+        JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void searchStudentByName() {
+        String studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
+        StringBuilder sb = new StringBuilder();
+        boolean found = false;
+
+        for (Student student : students) {
+            if (student.getName().equalsIgnoreCase(studentName)) {
+                found = true;
+                sb.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                  .append("Class: ").append(student.getStudentClass()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n")
+                  .append("Modules Taken:\n");
+
+                ArrayList<Module> modules = student.getModules();
+                for (int j = 0; j < modules.size(); j++) {
+                    Module module = modules.get(j);
+                    sb.append(j + 1).append(". ")
+                      .append(module.getModuleCode()).append(" / ")
+                      .append(module.getModuleName()).append(" / ")
+                      .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+                      .append("Marks: ").append(module.getMarks()).append("\n");
+                }
+                sb.append("-----------\n");
+            }
+        }
+
+        if (!found) {
+            cannotFindStudent(studentName);
+            return;
+        }
+
+        JOptionPane.showMessageDialog(null, sb.toString(), "Student Details", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    // if there are no students available
+    
+    // Member B
+    public void addStudent() {
+        String name = getInput("Enter name:", "Name cannot be empty. Please enter a valid name.");
+        String adminNumber = getInput("Enter Admin:", "Admin number cannot be empty. Please enter a valid admin number.");
+        String studentClass = getInput("Enter Class:", "Class cannot be empty. Please enter a valid class.");
+
+        Student student = new Student(adminNumber, name, studentClass);
+
+        int numberOfModules = getIntInput("Enter number of Modules Taken:", "Number of modules must be at least 1. Please enter a valid number.", 1, Integer.MAX_VALUE);
+
+        for (int i = 1; i <= numberOfModules; i++) {
+            addModuleToStudent(student, i);
+        }
+
+        student.calculateGPA();
+        students.add(student);
+        JOptionPane.showMessageDialog(null, "Student added successfully:\n" + student);
+    }
+
+    public void deleteStudent() {
+        String adminNumber = getInput("Enter Admin Number of student to delete:", "Admin number cannot be empty. Please enter a valid admin number.");
+        Student studentToDelete = null;
+
+        for (Student student : students) {
+            if (student.getAdminNumber().equals(adminNumber)) {
+                studentToDelete = student;
+                break;
+            }
+        }
+
+        if (studentToDelete != null) {
+            students.remove(studentToDelete);
+            JOptionPane.showMessageDialog(null, "Student deleted successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Student not found.");
+        }
+    }
+
+    public void addModuleForStudent() {
+        String adminNumber = getInput("Enter Admin Number of student to add module:", "Admin number cannot be empty. Please enter a valid admin number.");
+
+        for (Student student : students) {
+            if (student.getAdminNumber().equals(adminNumber)) {
+                int i = student.getModules().size() + 1;
+                do {
+                    addModuleToStudent(student, i++);
+                } while (JOptionPane.showConfirmDialog(null, "Add more modules?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
+
+                student.calculateGPA();
+                JOptionPane.showMessageDialog(null, "Modules added successfully.");
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Student not found.");
+    }
+
+    private void addModuleToStudent(Student student, int moduleIndex) {
+        String moduleCode = getInput("Enter Module Code for module " + moduleIndex + ":", "Module code cannot be empty. Please enter a valid module code.");
+        String moduleName = getInput("Enter Module Name for module " + moduleIndex + ":", "Module name cannot be empty. Please enter a valid module name.");
+        int creditUnit = getIntInput("Enter Credit Unit for module " + moduleIndex + ":", "Credit units must be at least 1. Please enter a valid number.", 1, Integer.MAX_VALUE);
+        int marks = getIntInput("Enter Marks for module " + moduleIndex + ":", "Marks must be between 0 and 100. Please enter a valid number.", 0, 100);
+
+        Module module = new Module(moduleCode, moduleName, creditUnit, marks);
+        student.addModule(module);
+    }
+
+    private String getInput(String message, String errorMessage) {
+        String input = null;
+        while (input == null || input.trim().isEmpty()) {
+            input = JOptionPane.showInputDialog(message);
+            if (input == null || input.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, errorMessage);
+            }
+        }
+        return input.trim();
+    }
+
+    private int getIntInput(String message, String errorMessage, int minValue, int maxValue) {
+        int input = -1;
+        while (input < minValue || input > maxValue) {
+            try {
+                String inputStr = JOptionPane.showInputDialog(message);
+                if (inputStr == null) {
+                    JOptionPane.showMessageDialog(null, errorMessage);
+                } else {
+                    input = Integer.parseInt(inputStr);
+                    if (input < minValue || input > maxValue) {
+                        JOptionPane.showMessageDialog(null, errorMessage);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
+            }
+        }
+        return input;
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
     public static void noStudentsAvailable() {
         JOptionPane.showMessageDialog(null, "No students available.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // OPTION 2
-    // gets the information from StudentManagement.java
-    public String searchStudentByClass() {
-        String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
-        displayClassSummary(studentClass);
-        return studentClass;
-    }
- 
-    public static String displayClassSummary(String studentClass) {
-        // if class exists, display the number of students in the class and average gpa
-        // if class does not exist, display error message
-        /*
-        add your code to get the student class that is equal to the class in the studentClass variable
-        suggestion: get all the students that have the same class parameter or create a method for that
-        */
-        
-    }
-    
-    // this function is to display an error message if the student class cannot be found. please use it.
+
     public static void noStudentClass() {
         JOptionPane.showMessageDialog(null, "No student found from class!");
     }
-    
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // OPTION 3
-    // gets the information from StudentManagement.java
-    public String searchStudentByName() {
-        String studentName = "";
-        studentName = JOptionPane.showInputDialog(null, "Enter the Student name to search: ");
-        // 
-        findStudent(studentName); 
-        return studentName;
-    }
-    
-    public static String findStudent(String studentName) {
-        // to be filled in later on
-    }
-    
-    // to use if student name cannot be found in the system
+
     private static void cannotFindStudent(String studentName) {
         String errorMessage = String.format("Cannot find the student %s", studentName);
         JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // OPTION 4
-    // exits the program
-    // this method is working. PLEASE DO NOT TOUCH.
-    public void quitProgram() {
-        JOptionPane.showMessageDialog(null, "Program terminated.\nThank You!");
-        System.exit(0);
-    }
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // DISPLAY MENU ERROR MESSAGE
-    // this method is working. PLEASE DO NOT TOUCH.
-    public void displayMenuError() {
-        String errorMessageText = "Invalid input. Please enter a number from 1 to 4.";
-        JOptionPane.showMessageDialog(null, errorMessageText, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-    
-    
-    
-    
 }
