@@ -8,7 +8,7 @@ package files;
  *
  * @author asher
  */
-import java.util.ArrayList*;
+import java.util.*;
 import javax.swing.JOptionPane;
 
 public class StudentManagement {
@@ -89,10 +89,10 @@ public class StudentManagement {
             noStudentClass();
             return;
         }
-
+        
         double averageGPA = totalGPA / studentCount;
         sb.append("Number of students in class ").append(studentClass).append(": ").append(studentCount).append("\n")
-          .append("Average GPA: ").append(averageGPA);
+         .append("Average GPA: ").append(String.format("%.2f", averageGPA));
 
         JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
     }

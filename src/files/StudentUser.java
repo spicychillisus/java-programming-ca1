@@ -13,7 +13,12 @@ import javax.swing.JOptionPane;
  */
 
 public class StudentUser {
-
+    
+    // makes life easier if a function is called for an error message
+    public static void displayMenuErrorMesage() {
+        JOptionPane.showMessageDialog(null, "Invalid option. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
     private static int displayMainMenu() {
         String header = "Enter your option: \n";
         String options = "1. Student Enquiry System\n2. Student Admin System\n3. Quit";
@@ -45,7 +50,8 @@ public class StudentUser {
             return -1; // Invalid input
         }
     }
-
+    
+    // done by asher.
     private static int displayAdminMenu() {
         String header = "Enter your option: \n";
         String options = "1. Add new student\n2. Delete student\n3. Add new module for student\n4. Back to Main Menu";
@@ -77,7 +83,7 @@ public class StudentUser {
                 // Back to main menu
                 break;
             default:
-                JOptionPane.showMessageDialog(null, "Invalid option. Please try again.");
+                displayMenuErrorMesage();
                 break;
         }
     }
@@ -97,10 +103,12 @@ public class StudentUser {
                 // Back to main menu
                 break;
             default:
-                JOptionPane.showMessageDialog(null, "Invalid option. Please try again.");
+                displayMenuErrorMesage();
                 break;
         }
     }
+    
+    
 
     public static void main(String[] args) {
         StudentManagement sm = new StudentManagement();
@@ -127,7 +135,7 @@ public class StudentUser {
                     System.exit(0);
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Invalid option. Please try again.");
+                    displayMenuErrorMesage();
             }
         }
     }
