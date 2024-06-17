@@ -6,18 +6,17 @@ package files;
 
 import javax.swing.JOptionPane;
 
-
 /**
  *
  * @author asher
  */
 
+/**
+ * This is the main class of the whole program 
+ * Written by:
+*/
+
 public class StudentUser {
-    
-    // makes life easier if a function is called for an error message
-    public static void displayMenuErrorMesage() {
-        JOptionPane.showMessageDialog(null, "Invalid option. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
     
     private static int displayMainMenu() {
         String header = "Enter your option: \n";
@@ -54,12 +53,26 @@ public class StudentUser {
     // done by asher.
     private static int displayAdminMenu() {
         String header = "Enter your option: \n";
-        String options = "1. Add new student\n2. Delete student\n3. Add new module for student\n4. Back to Main Menu";
+        String menuText = "";
+        
+        int[] indices = {1, 2, 3, 4, 5};
+        String[] options = {
+            "Add new student", 
+            "Delete student", 
+            "Add new module for student", 
+            "Print out student statistics",
+            "Back to Main Menu"
+        };
+        
+        menuText += header; // initialise with header once
+        
+        for (int i = 0; i < options.length; i++) {
+            menuText += String.format("%d. %s\n", indices[i], options[i]);
+        }
 
-        String menuText = header + options;
         String getInput = JOptionPane.showInputDialog(null, menuText);
         if (getInput == null) {
-            return 4; // Treat cancel as back to main menu
+            return 5; // Treat cancel as back to main menu
         }
         try {
             return Integer.parseInt(getInput);
@@ -80,7 +93,7 @@ public class StudentUser {
                 sm.searchStudentByName();
                 break;
             case 4:
-                // Back to main menu
+                // back to main menu
                 break;
             default:
                 displayMenuErrorMesage();
@@ -100,6 +113,10 @@ public class StudentUser {
                 sm.addModuleForStudent();
                 break;
             case 4:
+                //JOptionPane.showMessageDialog(null, "this is a test message");
+                displayPrintOutStudentStatisticMenu();
+                break;
+            case 5:
                 // Back to main menu
                 break;
             default:
@@ -108,7 +125,23 @@ public class StudentUser {
         }
     }
     
+    private static void displayPrintOutStudentStatisticMenu() {
+        String display = "";
+        display = """
+                  1. Print out individual student statistic
+                  2. Print out class statistic
+                  """;
+        JOptionPane.showInputDialog(display);
+    }
     
+    private static void handlePrintStudentStatisticMenu() {
+        
+    }
+    
+    // makes life easier if a function is called for an error message
+    public static void displayMenuErrorMesage() {
+        JOptionPane.showMessageDialog(null, "Invalid option. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
     public static void main(String[] args) {
         StudentManagement sm = new StudentManagement();
@@ -126,7 +159,7 @@ public class StudentUser {
                 case 2:
                     while (true) {
                         int adminChoice = displayAdminMenu();
-                        if (adminChoice == 4) break; // Back to main menu
+                        if (adminChoice == 5) break; // Back to main menu
                         handleAdminMenu(adminChoice, sm);
                     }
                     break;

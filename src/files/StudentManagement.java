@@ -10,6 +10,9 @@ package files;
  */
 import java.util.*;
 import javax.swing.JOptionPane;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class StudentManagement {
     private ArrayList<Student> students;
@@ -70,9 +73,10 @@ public class StudentManagement {
 
     public void searchStudentByClass() {
         String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
-        StringBuilder sb = new StringBuilder();
         int studentCount = 0;
         double totalGPA = 0.0;
+        StringBuilder sb = new StringBuilder();
+
 
         for (Student student : students) {
             if (student.getStudentClass().equalsIgnoreCase(studentClass)) {
@@ -95,6 +99,55 @@ public class StudentManagement {
          .append("Average GPA: ").append(String.format("%.2f", averageGPA));
 
         JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void printAllStudents() {
+        double totalGPA = 0.0;
+        int studentCount = 0;
+        String studentClass = "";
+        String printOut = "";
+        String output = "";
+        
+        studentClass = JOptionPane.showInputDialog("Enter the class statistic you wish to print out: ");
+        
+        for (Student student : students) {
+            if (student.getStudentClass().equalsIgnoreCase(studentClass)) {
+                studentCount++;
+                totalGPA += student.getGPA();
+                printOut +="""
+                           Name: %s
+                           Admin: %s
+                           GPA: %d
+                           --------------
+                           """;
+                
+                output = String.format(printOut, student.getName(), student.getAdminNumber(), student.getGPA());
+
+                        
+                sb.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n")
+                  .append("-----------\n");
+            }
+        }
+        
+        /*
+        * The FileWriter class in Java is typically used for writing character files.
+        * It is not recommended to use FileWriter to write data directly into Microsoft Office formats 
+        * such as .docx, .ppt, .xlsx, etc., as it could lead to data corruption.
+        * These formats are complex and require specific libraries to handle them correctly.
+        */
+        try {
+            FileWriter writer = new FileWriter("allStudents.txt");
+            writer.write(output);
+            writer.close();
+        } catch (IOException e) {
+            
+        }
+    }
+    
+    public static void printIndividualStudent() {
+        
     }
 
     public void searchStudentByName() {
