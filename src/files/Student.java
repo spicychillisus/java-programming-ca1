@@ -16,7 +16,8 @@ public class Student {
     private String studentClass;
     private ArrayList<Module> modules;
     private double gpa;
-
+    
+    
     public Student(String adminNumber, String name, String studentClass) {
         this.adminNumber = adminNumber;
         this.name = name;

@@ -127,15 +127,28 @@ public class StudentUser {
     
     private static void displayPrintOutStudentStatisticMenu() {
         String display = "";
+        int input = 0;
         display = """
                   1. Print out individual student statistic
                   2. Print out class statistic
                   """;
-        JOptionPane.showInputDialog(display);
+        input = Integer.parseInt(JOptionPane.showInputDialog(display));
+        handlePrintStudentStatisticMenu(input);
     }
     
-    private static void handlePrintStudentStatisticMenu() {
-        
+    private static void handlePrintStudentStatisticMenu(int input) {
+        StudentManagement sm = new StudentManagement();
+        switch (input) {
+            case 1:
+                sm.getIndividualStudentData();
+                break;
+            case 2:
+                sm.printAllStudents();
+                break;
+            default:
+                displayMenuErrorMesage();
+                break;
+        }
     }
     
     // makes life easier if a function is called for an error message
