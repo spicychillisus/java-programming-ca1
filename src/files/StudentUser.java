@@ -131,6 +131,7 @@ public class StudentUser {
         display = """
                   1. Print out individual student statistic
                   2. Print out class statistic
+                  3. Print out all student statistics
                   """;
         input = Integer.parseInt(JOptionPane.showInputDialog(display));
         handlePrintStudentStatisticMenu(input);
@@ -138,12 +139,17 @@ public class StudentUser {
     
     private static void handlePrintStudentStatisticMenu(int input) {
         StudentManagement sm = new StudentManagement();
+        Printer print = new Printer(sm.getAllStudents());
+        
         switch (input) {
             case 1:
                 sm.getIndividualStudentData();
                 break;
             case 2:
                 sm.printAllStudents();
+                break;
+            case 3:
+                
                 break;
             default:
                 displayMenuErrorMesage();

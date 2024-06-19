@@ -11,7 +11,9 @@ package files;
 /**
  * This object simulates printers in real life where you send data to it and the printer prints it out
  * @author spicychilisus
+ * @author yujie please insert ur github username
  */
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -20,16 +22,40 @@ import javax.swing.JOptionPane;
 
 public class Printer {
 
-    public String content;
+    public String allStudentContent;
+    public String individualStudentContent;
+    public String allStudentClassData;
+    private Student student;
+    //private StudentManagement sm;
     
-    public Printer(String content) {
-        this.content = content;
+    /**
+     * @param allStudentContent String
+     * @param individualStudentContent String
+     * @param allStudentClassData String
+     * highly suggested that the content to be compiled into one variable and not
+     * a long string :D
+     */
+    public Printer(String allStudentContent, String individualStudentContent, String allStudentClassData) {
+        this.allStudentContent = allStudentContent;
+        this.individualStudentContent = individualStudentContent;
+        this.allStudentClassData = allStudentClassData;
+    }
+    
+    
+    // getter methods to get all student content from the student management class
+
+    public String getAllStudentContent() {
+        return allStudentContent;
     }
 
-    public String getContent() {
-        return content;
+    public String getIndividualStudentContent() {
+        return individualStudentContent;
     }
-    
+
+    public String getAllStudentClassData() {
+        return allStudentClassData;
+    }
+
     // maybe this method can be used outside this class hehe
     public String getTime() {
         String time = "";
@@ -39,8 +65,14 @@ public class Printer {
         return time;
     }
     
-    private void getAllStudentData() {
-        
+    
+    
+    /***
+     * Need to compile the content and the time content was generated
+     * @return String
+     */
+    public String collateAllStudentContent() {
+        String allData = ""; // initialise
     }
     
     /**
@@ -49,8 +81,8 @@ public class Printer {
      */
     
     public void confirmAllStudentsContent() {
-        String confirmMessage = "Are you sure the content here is correct?";
-        String contentCheck = confirmMessage + content;
+        String confirmMessage = "Are you sure the content here is correct?\n";
+        String contentCheck = confirmMessage + allStudentContent;
         int confirm = JOptionPane.showConfirmDialog(
                 null, 
                 contentCheck,
@@ -59,9 +91,7 @@ public class Printer {
         
         if (confirm == JOptionPane.YES_OPTION) {
             printAllStudents();
-        } else if(confirm == JOptionPane.NO_OPTION) {
-            
-        }
+        } 
     }
     
     public void confirmIndividualStudentContent(String content) {
@@ -74,8 +104,9 @@ public class Printer {
                 JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
+            printIndividualStudent();
             
-        } else if(confirm == JOptionPane.NO_OPTION) {
+        } else if (confirm == JOptionPane.NO_OPTION) {
             
         } 
 
@@ -88,34 +119,46 @@ public class Printer {
         * such as .docx, .ppt, .xlsx, etc., as it could lead to data corruption.
         * These formats are complex and require specific libraries to handle them correctly.
         * The easiest file format for it to handle is .txt file, which is the notepad file format.
+        * No external specific libraries are required to handle .txt format
         * FileWriter object must be enclosed in a try catch as there is a unreported IO exception and must
         * be handled
      */
     
+    // error message to be displayed when the printing fails
     private void printingError() {
         JOptionPane.showMessageDialog(
                 null, 
-                "Unable to print student details, please try again.", 
+                "Unable to print details, please try again.", 
                 "Error", 
                 JOptionPane.ERROR_MESSAGE
         );
     }
     
-    public void printAllStudents(Student student, Module module) {
+    public void printAllStudents() {
         String fileName = "";
         String fileNameTemplate = "data-of-class-%s.txt";
         fileName = String.format(fileNameTemplate, student.getStudentClass());
                 
         try {
-            FileWriter fw = new FileWriter("allStudents.txt");
-            fw.write(this.content);
+            FileWriter fw = new FileWriter(fileName);
+            fw.write(this.allStudentContent);
         } catch (IOException e) {
-            
+            printingError();
         }
     }
     
-    public void printIndividualStudent(Student student) {
+    public void printIndividualStudent() {
+        String fileName = "";
+        String fileNameTemplate = "data-of-student-%s.txt";
+        String studentName = student.getName();
+        fileName = String.format(fileNameTemplate, studentName);
         
+        try {
+            FileWriter fw = new FileWriter(fileName);
+            fw.write(this.individualStudentContent);
+        } catch (IOException e) {
+            printingError();
+        }
     }
     
     

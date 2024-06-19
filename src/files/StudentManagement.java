@@ -10,14 +10,10 @@ package files;
  */
 import java.util.*;
 import javax.swing.JOptionPane;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class StudentManagement {
-    private ArrayList<Student> students;
+    public ArrayList<Student> students;
 
     public StudentManagement() {
         students = new ArrayList<>();
@@ -72,6 +68,36 @@ public class StudentManagement {
 
         JOptionPane.showMessageDialog(null, sb.toString(), "All Students", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    // for the printer constructor
+    public String getAllStudents() {
+        if (students.isEmpty()) {
+            return "No students available";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+            sb.append("Student ").append(i + 1).append(":\n")
+              .append("Name: ").append(student.getName()).append("\n")
+              .append("Admin: ").append(student.getAdminNumber()).append("\n")
+              .append("Class: ").append(student.getStudentClass()).append("\n")
+              .append("Modules Taken:\n");
+            
+            ArrayList<Module> modules = student.getModules();
+            for (int j = 0; j < modules.size(); j++) {
+                Module module = modules.get(j);
+                sb.append(j + 1).append(". ")
+                  .append(module.getModuleCode()).append(" / ")
+                  .append(module.getModuleName()).append(" / ")
+                  .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+                  .append("Marks: ").append(module.getMarks()).append("\n");
+            }
+            sb.append("-----------\n");
+        }
+
+        return sb.toString();
+    }
 
     public void searchStudentByClass() {
         String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
@@ -103,99 +129,7 @@ public class StudentManagement {
         JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    public void printAllStudents() {
-        double totalGPA = 0.0;
-        int studentCount = 0;
-        String studentClass = "";
-        String printOut = "";
-        String output = "";
-        
-        studentClass = JOptionPane.showInputDialog("Enter the class statistic you wish to print out: ");
-        
-        for (Student student : students) {
-            if (student.getStudentClass().equalsIgnoreCase(studentClass)) {
-                studentCount++;
-                totalGPA += student.getGPA();
-                printOut = """
-                           Name: %s
-                           Admin: %s
-                           GPA: %d
-                           --------------
-                           """;
-                
-                output = String.format(printOut, student.getName(), student.getAdminNumber(), student.getGPA());
-                
-                        
-//                sb.append("Name: ").append(student.getName()).append("\n")
-//                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
-//                  .append("GPA: ").append(student.getGPA()).append("\n")
-//                  .append("-----------\n");
-            }
-        }
-        //System.out.println(output); // test case
-        
-        /*
-        * The FileWriter class in Java is typically used for writing character files.
-        * It is not recommended to use FileWriter to write data directly into Microsoft Office formats 
-        * such as .docx, .ppt, .xlsx, etc., as it could lead to data corruption.
-        * These formats are complex and require specific libraries to handle them correctly.
-        * The easiest file format for it to handle is .txt file, which is the notepad file format.
-        * FileWriter object must be enclosed in a try catch as there is a unreported IO exception and must
-        * be handled
-        */
-        try {
-            FileWriter writer = new FileWriter("test.txt");
-            writer.write(output);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-    }
     
-    public void getIndividualStudentData() {
-        String studentName = "";
-        boolean located = false;
-        String output = "";
-        
-        // getting the time and date
-        LocalDateTime dt = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formattedTime = dt.format(dtf);
-                
-        studentName = JOptionPane.showInputDialog(null, "Enter the name of the student you wish to print out: ");
-        
-        for (Student student: students) {
-            if (student.getName().equals(studentName)) {
-                String display = """
-                                 Name: %s
-                                 Admin: %s
-                                 Class: %s
-                                 GPA: %d
-                                 Modules Taken: %s
-                                 """;
-                output = String.format(
-                        display, 
-                        student.getAdminNumber(), 
-                        student.getStudentClass(),
-                        student.getGPA()
-                        );
-                printIndividualStudentData(output, studentName);
-                break;
-            }
-        }
-    }
-    
-    private static void printIndividualStudentData(String printOut, String studentName) {
-        studentName = studentName.replaceAll("\\s", "-");
-        String fileName = String.format("data-of-student-%s.txt", studentName);
-        try {
-            FileWriter fw = new FileWriter(fileName);
-            fw.write(printOut);
-        } catch (IOException e) {
-            // just in case the file fails to print out
-        }
-    }
 
     public void searchStudentByName() {
         String studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
