@@ -139,11 +139,21 @@ public class StudentUser {
     
     private static void handlePrintStudentStatisticMenu(int input) {
         StudentManagement sm = new StudentManagement();
-        Printer print = new Printer(sm.getAllStudents());
+        
+        String allStudentContent = sm.getAllStudents();
+        String individualStudentContent = sm.getStudentByName();
+        String allStudentClassData = sm.getStudentByClass();
+        
+        /**
+         * The printer object is the advanced feature that was implemented
+         * The purpose of the printer is to... it's quite obvious: to print out the student content in a .txt file
+         * @author asher
+         */
+        Printer print = new Printer(allStudentContent, individualStudentContent, allStudentClassData);
         
         switch (input) {
             case 1:
-                sm.getIndividualStudentData();
+                print.printIndividualStudent();
                 break;
             case 2:
                 sm.printAllStudents();

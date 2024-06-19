@@ -129,6 +129,38 @@ public class StudentManagement {
         JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
     }
     
+    // for printing purposes
+    public String getStudentByClass() {
+        String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
+        int studentCount = 0;
+        double totalGPA = 0.0;
+        StringBuilder sb = new StringBuilder();
+
+
+        for (Student student : students) {
+            if (student.getStudentClass().equalsIgnoreCase(studentClass)) {
+                studentCount++;
+                totalGPA += student.getGPA();
+                sb.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n")
+                  .append("-----------\n");
+            }
+        }
+
+        if (studentCount == 0) {
+            noStudentClass();
+            return;
+        }
+        
+        double averageGPA = totalGPA / studentCount;
+        sb.append("Number of students in class ").append(studentClass).append(": ").append(studentCount).append("\n")
+         .append("Average GPA: ").append(String.format("%.2f", averageGPA));
+
+        //JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
+        return sb.toString();
+    }
+    
     
 
     public void searchStudentByName() {
@@ -164,6 +196,40 @@ public class StudentManagement {
         }
 
         JOptionPane.showMessageDialog(null, sb.toString(), "Student Details", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public String getStudentByName() {
+        String studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
+        StringBuilder sb = new StringBuilder();
+        boolean found = false;
+
+        for (Student student : students) {
+            if (student.getName().equalsIgnoreCase(studentName)) {
+                found = true;
+                sb.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                  .append("Class: ").append(student.getStudentClass()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n")
+                  .append("Modules Taken:\n");
+
+                ArrayList<Module> modules = student.getModules();
+                for (int j = 0; j < modules.size(); j++) {
+                    Module module = modules.get(j);
+                    sb.append(j + 1).append(". ")
+                      .append(module.getModuleCode()).append(" / ")
+                      .append(module.getModuleName()).append(" / ")
+                      .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+                      .append("Marks: ").append(module.getMarks()).append("\n");
+                }
+                sb.append("-----------\n");
+            }
+        }
+
+        if (!found) {
+            return "No student found with that name";
+        }
+
+        return sb.toString();
     }
     
     

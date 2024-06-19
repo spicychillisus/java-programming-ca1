@@ -26,7 +26,7 @@ public class Printer {
     public String individualStudentContent;
     public String allStudentClassData;
     private Student student;
-    //private StudentManagement sm;
+    private StudentManagement sm;
     
     /**
      * @param allStudentContent String
@@ -43,6 +43,7 @@ public class Printer {
     
     
     // getter methods to get all student content from the student management class
+    // are they even needed?
 
     public String getAllStudentContent() {
         return allStudentContent;
@@ -69,20 +70,33 @@ public class Printer {
     
     /***
      * Need to compile the content and the time content was generated
-     * @return String
+     * @return collateAllStudentContent String
      */
+    
     public String collateAllStudentContent() {
         String allData = ""; // initialise
+        String time = getTime();
+        allData = """
+                  %s
+                  %s
+                  """;
+        allData = String.format(allData, this.allStudentContent, time);
+
     }
     
     /**
      * Checking if the content is being printed is important as when the
      * data is printed it's an irreversible task so it's very important if the data is checked before printing
+     * @return confirmMessage String
      */
     
+    public String confirmationMessage() {
+         String confirmMessage = "Are you sure the content here is correct?\n";
+         return confirmMessage;
+    }
+    
     public void confirmAllStudentsContent() {
-        String confirmMessage = "Are you sure the content here is correct?\n";
-        String contentCheck = confirmMessage + allStudentContent;
+        String contentCheck = confirmationMessage() + this.allStudentContent;
         int confirm = JOptionPane.showConfirmDialog(
                 null, 
                 contentCheck,
@@ -94,9 +108,8 @@ public class Printer {
         } 
     }
     
-    public void confirmIndividualStudentContent(String content) {
-        String confirmMessage = "Are you sure the content here is correct?";
-        String contentCheck = confirmMessage + content;
+    public void confirmIndividualStudentContent() {
+        String contentCheck = confirmationMessage() + this.individualStudentContent;
         int confirm = JOptionPane.showConfirmDialog(
                 null, 
                 contentCheck,
@@ -106,11 +119,25 @@ public class Printer {
         if (confirm == JOptionPane.YES_OPTION) {
             printIndividualStudent();
             
-        } else if (confirm == JOptionPane.NO_OPTION) {
-            
         } 
 
     }
+    
+    public void confirmAllStudentClassData() {
+        String contentCheck = confirmationMessage() + this.allStudentClassData;
+        int confirm = JOptionPane.showConfirmDialog(
+                null, 
+                contentCheck,
+                "Confirm",
+                JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            printIndividualStudent();
+            
+        } 
+        
+    }
+        
     
     /*
         * You may see a object called "FileWriter" being used in the bottom methods
@@ -124,20 +151,11 @@ public class Printer {
         * be handled
      */
     
-    // error message to be displayed when the printing fails
-    private void printingError() {
-        JOptionPane.showMessageDialog(
-                null, 
-                "Unable to print details, please try again.", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE
-        );
-    }
-    
+     // prints out all the student data available in the school
     public void printAllStudents() {
         String fileName = "";
-        String fileNameTemplate = "data-of-class-%s.txt";
-        fileName = String.format(fileNameTemplate, student.getStudentClass());
+        fileName = "data-of-all-students.txt";
+        //fileName = String.format(fileNameTemplate);
                 
         try {
             FileWriter fw = new FileWriter(fileName);
@@ -159,6 +177,30 @@ public class Printer {
         } catch (IOException e) {
             printingError();
         }
+    }
+    
+    public void printAllStudentClass() {
+        String fileName = "";
+        String fileNameTemplate = "data-of-class-%s.txt";
+        String studentClass = student.getStudentClass();
+        fileName = String.format(fileNameTemplate, studentClass);
+        
+        try {
+            FileWriter fw = new FileWriter(fileName);
+            fw.write(this.allStudentClassData);
+        } catch (IOException e) {
+            printingError();
+        }
+    }
+    
+    // error message to be displayed when the printing fails
+    private void printingError() {
+        JOptionPane.showMessageDialog(
+                null, 
+                "Unable to print details, please try again.", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE
+        );
     }
     
     
