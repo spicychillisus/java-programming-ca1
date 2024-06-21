@@ -132,6 +132,7 @@ public class StudentUser {
                   1. Print out individual student statistic
                   2. Print out class statistic
                   3. Print out all student statistics
+                  4. test class (will be removed)
                   """;
         input = Integer.parseInt(JOptionPane.showInputDialog(display));
         handlePrintStudentStatisticMenu(input);
@@ -148,6 +149,7 @@ public class StudentUser {
          * The printer object is the advanced feature that was implemented
          * The purpose of the printer is to... it's quite obvious: to print out the student content in a .txt file
          * @author asher
+         * hardest part was really sm.getAllStudents();
          */
         Printer print = new Printer(allStudentContent, individualStudentContent, allStudentClassData);
         
@@ -156,10 +158,13 @@ public class StudentUser {
                 print.printIndividualStudent();
                 break;
             case 2:
-                sm.printAllStudents();
+                print.printAllStudentClass();
                 break;
             case 3:
-                
+                print.printAllStudents();
+                break;
+            case 4:
+                sm.getAllStudents();
                 break;
             default:
                 displayMenuErrorMesage();

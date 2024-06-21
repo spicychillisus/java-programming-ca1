@@ -16,8 +16,6 @@ package files;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 public class Printer {
@@ -26,14 +24,16 @@ public class Printer {
     public String individualStudentContent;
     public String allStudentClassData;
     private Student student;
-    private StudentManagement sm;
     
     /**
+     * highly suggested that the content to be compiled into one variable and not
+     * a long string :D
+     * allStudentContent: data taken from StudentManagement
+     * individualStudentContent: data taken from StudentManagement
+     * allStudentClassData: data taken from StudentManagement
      * @param allStudentContent String
      * @param individualStudentContent String
      * @param allStudentClassData String
-     * highly suggested that the content to be compiled into one variable and not
-     * a long string :D
      */
     public Printer(String allStudentContent, String individualStudentContent, String allStudentClassData) {
         this.allStudentContent = allStudentContent;
@@ -56,87 +56,6 @@ public class Printer {
     public String getAllStudentClassData() {
         return allStudentClassData;
     }
-
-    // maybe this method can be used outside this class hehe
-    public String getTime() {
-        String time = "";
-        LocalDateTime ldt = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-mm-yyyy hh:mm:ss");
-        time = dtf.format(ldt);
-        return time;
-    }
-    
-    
-    
-    /***
-     * Need to compile the content and the time content was generated
-     * @return collateAllStudentContent String
-     */
-    
-    public String collateAllStudentContent() {
-        String allData = ""; // initialise
-        String time = getTime();
-        allData = """
-                  %s
-                  %s
-                  """;
-        allData = String.format(allData, this.allStudentContent, time);
-
-    }
-    
-    /**
-     * Checking if the content is being printed is important as when the
-     * data is printed it's an irreversible task so it's very important if the data is checked before printing
-     * @return confirmMessage String
-     */
-    
-    public String confirmationMessage() {
-         String confirmMessage = "Are you sure the content here is correct?\n";
-         return confirmMessage;
-    }
-    
-    public void confirmAllStudentsContent() {
-        String contentCheck = confirmationMessage() + this.allStudentContent;
-        int confirm = JOptionPane.showConfirmDialog(
-                null, 
-                contentCheck,
-                "Confirm",
-                JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            printAllStudents();
-        } 
-    }
-    
-    public void confirmIndividualStudentContent() {
-        String contentCheck = confirmationMessage() + this.individualStudentContent;
-        int confirm = JOptionPane.showConfirmDialog(
-                null, 
-                contentCheck,
-                "Confirm",
-                JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            printIndividualStudent();
-            
-        } 
-
-    }
-    
-    public void confirmAllStudentClassData() {
-        String contentCheck = confirmationMessage() + this.allStudentClassData;
-        int confirm = JOptionPane.showConfirmDialog(
-                null, 
-                contentCheck,
-                "Confirm",
-                JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            printIndividualStudent();
-            
-        } 
-        
-    }
         
     
     /*
@@ -155,11 +74,11 @@ public class Printer {
     public void printAllStudents() {
         String fileName = "";
         fileName = "data-of-all-students.txt";
-        //fileName = String.format(fileNameTemplate);
                 
         try {
             FileWriter fw = new FileWriter(fileName);
-            fw.write(this.allStudentContent);
+            fw.write(getAllStudentContent());
+            fw.close(); // to save resources
         } catch (IOException e) {
             printingError();
         }
@@ -187,6 +106,7 @@ public class Printer {
         
         try {
             FileWriter fw = new FileWriter(fileName);
+            fw.close();
             fw.write(this.allStudentClassData);
         } catch (IOException e) {
             printingError();

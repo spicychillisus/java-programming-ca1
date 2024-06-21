@@ -95,10 +95,10 @@ public class StudentManagement {
             }
             sb.append("-----------\n");
         }
-
+        
         return sb.toString();
     }
-
+    
     public void searchStudentByClass() {
         String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
         int studentCount = 0;
@@ -150,7 +150,7 @@ public class StudentManagement {
 
         if (studentCount == 0) {
             noStudentClass();
-            return;
+            //return;
         }
         
         double averageGPA = totalGPA / studentCount;
