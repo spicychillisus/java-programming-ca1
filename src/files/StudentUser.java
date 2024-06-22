@@ -13,13 +13,16 @@ import javax.swing.JOptionPane;
 
 /**
  * This is the main class of the whole program 
- * Written by:
 */
 
 public class StudentUser {
+
+    private static String displayHeaderMessage() {
+        return "Enter your option: \n";
+    }
     
     private static int displayMainMenu() {
-        String header = "Enter your option: \n";
+        String header = displayHeaderMessage();
         String options = "1. Student Enquiry System\n2. Student Admin System\n3. Quit";
 
         String menuText = header + options;
@@ -35,8 +38,9 @@ public class StudentUser {
     }
 
     private static int displayEnquiryMenu() {
-        String header = "Enter your option: \n";
+        String header = displayHeaderMessage();
         String options = "1. Display all students\n2. Search student by class\n3. Search student by name\n4. Back to Main Menu";
+
 
         String menuText = header + options;
         String getInput = JOptionPane.showInputDialog(null, menuText);
@@ -52,7 +56,7 @@ public class StudentUser {
     
     // done by asher.
     private static int displayAdminMenu() {
-        String header = "Enter your option: \n";
+        String header = displayHeaderMessage();
         String menuText = "";
         
         int[] indices = {1, 2, 3, 4, 5};
@@ -116,9 +120,6 @@ public class StudentUser {
                 //JOptionPane.showMessageDialog(null, "this is a test message");
                 displayPrintOutStudentStatisticMenu();
                 break;
-            case 5:
-                // Back to main menu
-                break;
             default:
                 displayMenuErrorMesage();
                 break;
@@ -132,7 +133,6 @@ public class StudentUser {
                   1. Print out individual student statistic
                   2. Print out class statistic
                   3. Print out all student statistics
-                  4. test class (will be removed)
                   """;
         input = Integer.parseInt(JOptionPane.showInputDialog(display));
         handlePrintStudentStatisticMenu(input);
@@ -140,7 +140,7 @@ public class StudentUser {
     
     private static void handlePrintStudentStatisticMenu(int input) {
         StudentManagement sm = new StudentManagement();
-        
+
         String allStudentContent = sm.getAllStudents();
         String individualStudentContent = sm.getStudentByName();
         String allStudentClassData = sm.getStudentByClass();
@@ -164,7 +164,7 @@ public class StudentUser {
                 print.printAllStudents();
                 break;
             case 4:
-                sm.getAllStudents();
+                JOptionPane.showMessageDialog(null, print.getAllStudentContent());
                 break;
             default:
                 displayMenuErrorMesage();

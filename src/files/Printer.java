@@ -43,7 +43,6 @@ public class Printer {
     
     
     // getter methods to get all student content from the student management class
-    // are they even needed?
 
     public String getAllStudentContent() {
         return allStudentContent;
@@ -93,6 +92,7 @@ public class Printer {
         try {
             FileWriter fw = new FileWriter(fileName);
             fw.write(this.individualStudentContent);
+            fw.close();
         } catch (IOException e) {
             printingError();
         }
@@ -106,8 +106,8 @@ public class Printer {
         
         try {
             FileWriter fw = new FileWriter(fileName);
-            fw.close();
             fw.write(this.allStudentClassData);
+            fw.close();
         } catch (IOException e) {
             printingError();
         }
