@@ -11,7 +11,6 @@ package files;
 /**
  * This object simulates printers in real life where you send data to it and the printer prints it out
  * @author spicychilisus
- * @author yujie please insert ur github username
  */
 
 import java.io.FileWriter;
@@ -19,37 +18,53 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 public class Printer extends StudentManagement {
-
+   
     private String allStudentContent;
     private String individualStudentContent;
     private String allStudentClassData;
-    private Student student;
+    private Integer index;
+    // create getter and setter methods
     
-    public Printer() {
+    // inherit the properties from the parent class
+    public Printer () {
         super();
     }
-    /**
-     * highly suggested that the content to be compiled into one variable and not
-     * a long string :D
-     * allStudentContent: data taken from StudentManagement
-     * individualStudentContent: data taken from StudentManagement
-     * allStudentClassData: data taken from StudentManagement
-     */
-    
     
     // getter methods to get all student content from the student management class
 
     public String getAllStudentContent() {
-        return allStudentContent;
+        return this.allStudentContent;
+    }
+    
+    public void setAllStudentContent(String allStudentContent) {
+        this.allStudentContent = allStudentContent;
+    }
+    
+    public Integer getIndex() {
+        return this.index;
+    }
+    
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getIndividualStudentContent() {
         return individualStudentContent;
     }
+    
+    public void setIndividualStudentContent(String individualStudentContent) {
+        this.individualStudentContent = individualStudentContent;
+    }
 
     public String getAllStudentClassData() {
         return allStudentClassData;
     }
+
+    public void setAllStudentClassData(String allStudentClassData) {
+        this.allStudentClassData = allStudentClassData;
+    }
+    
+    
         
     
     /*
@@ -65,6 +80,7 @@ public class Printer extends StudentManagement {
      */
     
      // prints out all the student data available in the school
+     // COMPLETED! DO NOT TOUCH! IT IS WORKING!
     public void printAllStudents() {
         String fileName = "";
         fileName = "data-of-all-students.txt";
@@ -72,40 +88,53 @@ public class Printer extends StudentManagement {
         try {
             FileWriter fw = new FileWriter(fileName);
             fw.write(getAllStudentContent());
+            printingSuccess();
             fw.close(); // to save resources
         } catch (IOException e) {
             printingError();
         }
     }
     
+    // in progress
     public void printIndividualStudent() {
         String fileName = "";
         String fileNameTemplate = "data-of-student-%s.txt";
-        String studentName = student.getName();
+        String studentName = students.get(index).getName();
         fileName = String.format(fileNameTemplate, studentName);
         
         try {
             FileWriter fw = new FileWriter(fileName);
-            fw.write(this.individualStudentContent);
+            fw.write(getIndividualStudentContent());
+            printingSuccess();
             fw.close();
         } catch (IOException e) {
             printingError();
         }
     }
-    
+   
     public void printAllStudentClass() {
         String fileName = "";
         String fileNameTemplate = "data-of-class-%s.txt";
-        String studentClass = student.getStudentClass();
+        String studentClass = students.get(index).getStudentClass();
         fileName = String.format(fileNameTemplate, studentClass);
         
         try {
             FileWriter fw = new FileWriter(fileName);
             fw.write(this.allStudentClassData);
+            printingSuccess();
             fw.close();
         } catch (IOException e) {
             printingError();
-        }
+        } 
+    }
+    
+    private static void printingSuccess() {
+        JOptionPane.showMessageDialog(
+                null,
+                "Successfully printed.",
+                "Printed",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
     
     // error message to be displayed when the printing fails

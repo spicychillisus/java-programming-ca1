@@ -13,11 +13,9 @@ import javax.swing.JOptionPane;
 
 
 public class StudentManagement {
-    private ArrayList<Student> students;
+    protected ArrayList<Student> students = new ArrayList<>();
 
     public StudentManagement() {
-        students = new ArrayList<>();
-        
         //member A
         // Adding dummy student data
         Student student1 = new Student("p2312555", "Sasmsudin", "DIT/FT/2A/02");
@@ -46,7 +44,8 @@ public class StudentManagement {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < students.size(); i++) {
+        int maxStudents = Math.min(students.size(), 4);
+        for (int i = 0; i < maxStudents; i++) {
             Student student = students.get(i);
             sb.append("Student ").append(i + 1).append(":\n")
               .append("Name: ").append(student.getName()).append("\n")
@@ -56,14 +55,23 @@ public class StudentManagement {
             
             ArrayList<Module> modules = student.getModules();
             for (int j = 0; j < modules.size(); j++) {
-                Module module = modules.get(j);
-                sb.append(j + 1).append(". ")
-                  .append(module.getModuleCode()).append(" / ")
-                  .append(module.getModuleName()).append(" / ")
-                  .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
-                  .append("Marks: ").append(module.getMarks()).append("\n");
+            Module module = modules.get(j);
+            sb.append(j + 1).append(". ")
+              .append(module.getModuleCode()).append(" / ")
+              .append(module.getModuleName()).append(" / ")
+              .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+              .append("Marks: ").append(module.getMarks()).append("\n");
             }
             sb.append("-----------\n");
+        }
+        
+        // only allow 4 students to be displayed in the JOptionPane. any more will make the display look messy
+        if (students.size() > 4) {
+            int remainingStudents = students.size() - 4;
+            sb.append("and ").append(remainingStudents).append(" more student");
+            if (remainingStudents > 1) {
+            sb.append("s");
+            }
         }
 
         JOptionPane.showMessageDialog(null, sb.toString(), "All Students", JOptionPane.INFORMATION_MESSAGE);
@@ -197,12 +205,18 @@ public class StudentManagement {
 
         JOptionPane.showMessageDialog(null, sb.toString(), "Student Details", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    public String getStudentByName() {
+
+    /**
+     * DO NOT TOUCH THIS IT WORKS PERFECTLY FINE
+     * @author spicychillisus
+     */
+    public ArrayList getStudentByName() {
         String studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
         StringBuilder sb = new StringBuilder();
         boolean found = false;
 
+        ArrayList data = new ArrayList<>();
+        int index = 0;
         for (Student student : students) {
             if (student.getName().equalsIgnoreCase(studentName)) {
                 found = true;
@@ -222,14 +236,18 @@ public class StudentManagement {
                       .append("Marks: ").append(module.getMarks()).append("\n");
                 }
                 sb.append("-----------\n");
+                data.add(index);
             }
+            index++;
         }
 
         if (!found) {
-            return "No student found with that name";
+            data.add("No student found with that name");
+            return data;
         }
-
-        return sb.toString();
+        
+        data.add(sb.toString());
+        return data;
     }
     
     

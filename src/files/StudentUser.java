@@ -4,6 +4,7 @@
  */
 package files;
 
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 /**
  * This is the main class of the whole program 
 */
+
 
 public class StudentUser {
 
@@ -117,15 +119,11 @@ public class StudentUser {
                 sm.addModuleForStudent();
                 break;
             case 4:
-                //JOptionPane.showMessageDialog(null, "this is a test message");
                 displayPrintOutStudentStatisticMenu();
                 break;
             case 5:
-                
+                // return back to menu
                 break;
-            case 6:
-                // return to main menu
-                return;
             default:
                 displayMenuErrorMesage();
                 break;
@@ -166,13 +164,9 @@ public class StudentUser {
     
     private static void handlePrintStudentStatisticMenu(int input) {
         StudentManagement sm = new StudentManagement();
-
-        String allStudentContent = sm.getAllStudents();
-        String individualStudentContent = sm.getStudentByName();
-        String allStudentClassData = sm.getStudentByClass();
         
         /**
-         * The printer object is the advanced feature that was implemented
+         * The printer object is one of the advanced feature that was implemented
          * The purpose of the printer is to... it's quite obvious: to print out the student content in a .txt file
          * @author asher
          * hardest part was really sm.getAllStudents();
@@ -181,12 +175,20 @@ public class StudentUser {
         
         switch (input) {
             case 1:
+                ArrayList data = sm.getStudentByName();
+                print.setIndex(Integer.parseInt(data.get(0).toString()));
+                print.setIndividualStudentContent(data.get(1).toString());
                 print.printIndividualStudent();
                 break;
             case 2:
+                print.setAllStudentClassData(sm.getStudentByClass());
                 print.printAllStudentClass();
                 break;
             case 3:
+                String allStudentsToPrint = sm.getAllStudents();
+                print.setAllStudentContent(allStudentsToPrint);
+                System.out.println(allStudentsToPrint);
+                System.out.println(allStudentsToPrint.length());
                 print.printAllStudents();
                 break;
             default:
