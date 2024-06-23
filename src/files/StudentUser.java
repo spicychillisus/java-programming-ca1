@@ -23,12 +23,12 @@ public class StudentUser {
     
     private static int displayMainMenu() {
         String header = displayHeaderMessage();
-        String options = "1. Student Enquiry System\n2. Student Admin System\n3. Quit";
+        String options = "1. Student Enquiry System\n2. Student Admin System\n3. GPA report\n4. Quit";
 
         String menuText = header + options;
         String getInput = JOptionPane.showInputDialog(null, menuText);
         if (getInput == null) {
-            return 3; // Treat cancel as quit
+            return 4; // Treat cancel as quit
         }
         try {
             return Integer.parseInt(getInput);
@@ -120,10 +120,36 @@ public class StudentUser {
                 //JOptionPane.showMessageDialog(null, "this is a test message");
                 displayPrintOutStudentStatisticMenu();
                 break;
+            case 5:
+                
+                break;
+            case 6:
+                // return to main menu
+                return;
             default:
                 displayMenuErrorMesage();
                 break;
         }
+    }
+    
+    private static double getDoubleInput(String message, String errorMessage) {
+        double input = -1;
+        while (input < 0) {
+            try {
+                String inputStr = JOptionPane.showInputDialog(message);
+                if (inputStr == null) {
+                    JOptionPane.showMessageDialog(null, errorMessage);
+                } else {
+                    input = Double.parseDouble(inputStr);
+                    if (input < 0) {
+                        JOptionPane.showMessageDialog(null, errorMessage);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
+            }
+        } 
+        return input;
     }
     
     private static void displayPrintOutStudentStatisticMenu() {
@@ -151,7 +177,7 @@ public class StudentUser {
          * @author asher
          * hardest part was really sm.getAllStudents();
          */
-        Printer print = new Printer(allStudentContent, individualStudentContent, allStudentClassData);
+        Printer print = new Printer();
         
         switch (input) {
             case 1:
@@ -163,9 +189,6 @@ public class StudentUser {
             case 3:
                 print.printAllStudents();
                 break;
-            case 4:
-                JOptionPane.showMessageDialog(null, print.getAllStudentContent());
-                break;
             default:
                 displayMenuErrorMesage();
                 break;
@@ -175,6 +198,11 @@ public class StudentUser {
     // makes life easier if a function is called for an error message
     public static void displayMenuErrorMesage() {
         JOptionPane.showMessageDialog(null, "Invalid option. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void terminateProgram() {
+        JOptionPane.showMessageDialog(null, "Program terminated.\nThank you!");
+        System.exit(0);
     }
 
     public static void main(String[] args) {
@@ -198,8 +226,12 @@ public class StudentUser {
                     }
                     break;
                 case 3:
-                    JOptionPane.showMessageDialog(null, "Program terminated.\nThank you!");
-                    System.exit(0);
+                    double minGPA = getDoubleInput("Enter minimum GPA: ", "Invalid input. Please enter a valid GPA");
+                    double maxGPA = getDoubleInput("Enter maximum GPA: ", "Invalid input. Please enter a valid GPA");
+                    sm.generateGPAReport(minGPA, maxGPA);
+                    break;
+                case 4:
+                    terminateProgram();
                     break;
                 default:
                     displayMenuErrorMesage();

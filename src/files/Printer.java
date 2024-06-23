@@ -18,28 +18,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
-public class Printer {
+public class Printer extends StudentManagement {
 
-    public String allStudentContent;
-    public String individualStudentContent;
-    public String allStudentClassData;
+    private String allStudentContent;
+    private String individualStudentContent;
+    private String allStudentClassData;
     private Student student;
     
+    public Printer() {
+        super();
+    }
     /**
      * highly suggested that the content to be compiled into one variable and not
      * a long string :D
      * allStudentContent: data taken from StudentManagement
      * individualStudentContent: data taken from StudentManagement
      * allStudentClassData: data taken from StudentManagement
-     * @param allStudentContent String
-     * @param individualStudentContent String
-     * @param allStudentClassData String
      */
-    public Printer(String allStudentContent, String individualStudentContent, String allStudentClassData) {
-        this.allStudentContent = allStudentContent;
-        this.individualStudentContent = individualStudentContent;
-        this.allStudentClassData = allStudentClassData;
-    }
     
     
     // getter methods to get all student content from the student management class

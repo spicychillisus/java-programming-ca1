@@ -13,28 +13,28 @@ import javax.swing.JOptionPane;
 
 
 public class StudentManagement {
-    public ArrayList<Student> students;
+    private ArrayList<Student> students;
 
     public StudentManagement() {
         students = new ArrayList<>();
         
         //member A
         // Adding dummy student data
-        Student student1 = new Student("A001", "John Doe", "CS101");
-        student1.addModule(new Module("M001", "Fundamentals of Programming", 4, 85));
-        student1.addModule(new Module("M002", "Mathematics I", 3, 78));
+        Student student1 = new Student("p2312555", "Sasmsudin", "DIT/FT/2A/02");
+        student1.addModule(new Module("ST0503", "Java Programming", 4, 78));
+        student1.addModule(new Module("ST0509", "Fundementals of Programming", 5, 85));
         student1.calculateGPA();
         students.add(student1);
 
-        Student student2 = new Student("A002", "Jane Smith", "CS101");
-        student2.addModule(new Module("M003", "Data Structures", 4, 90));
-        student2.addModule(new Module("M004", "Computer Architecture", 3, 88));
+        Student student2 = new Student("p2392525", "Peter Tan", "DIT/FT/2A/03");
+        student2.addModule(new Module("ST0503", "Java Programming", 4, 90));
+        student2.addModule(new Module("ST0509", "Fundementals of Programming", 5, 88));
         student2.calculateGPA();
         students.add(student2);
 
-        Student student3 = new Student("A003", "Alice Johnson", "CS102");
-        student3.addModule(new Module("M001", "Fundamentals of Programming", 4, 92));
-        student3.addModule(new Module("M005", "Discrete Mathematics", 3, 81));
+        Student student3 = new Student("p394830", "Xiao Ming", "DIT/FT/2A/04");
+        student3.addModule(new Module("ST0503", "Java Programming", 4, 92));
+        student3.addModule(new Module("ST509", "Fundementals of Programming", 5, 81));
         student3.calculateGPA();
         students.add(student3);
     }
@@ -332,6 +332,33 @@ public class StudentManagement {
 
     public ArrayList<Student> getStudents() {
         return students;
+    }
+    
+    // done by yujie
+    public void generateGPAReport(double minGPA, double maxGPA) {
+        StringBuilder sb = new StringBuilder();
+        int studentCount = 0;
+        
+        sb.append("Students with GPA between ").append(minGPA).append(" and ").append(maxGPA).append(":\n\n");
+        
+        for (Student student : students) {
+            if (student.getGPA() >= minGPA && student.getGPA() <= maxGPA) {
+                studentCount++;
+                sb.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                  .append("Class: ").append(student.getStudentClass()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n")
+                  .append("---------------------\n");
+            }
+        }
+        
+        if (studentCount == 0) {
+            sb.append("No students found within the specified GPA range.");
+        } else {
+            sb.append("Total students: ").append(studentCount);
+        }
+        
+        JOptionPane.showMessageDialog(null, sb.toString(), "GPA Report", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void noStudentsAvailable() {
