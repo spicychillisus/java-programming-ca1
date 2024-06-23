@@ -6,7 +6,8 @@ package files;
 
 /**
  *
- * @author asher
+ * @author DIT/FT/2B/23 P2210979 reyes asher benedict calaminos
+ * @author DIT/FT/2B/23 P2323150 Ng Yu Jie
  */
 public class Module {
     private String moduleCode;

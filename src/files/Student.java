@@ -6,9 +6,11 @@ package files;
 
 /**
  *
- * @author asher
+ * @author DIT/FT/2B/23 P2210979 reyes asher benedict calaminos
+ * @author DIT/FT/2B/23 P2323150 Ng Yu Jie
  */
 import java.util.ArrayList;
+
 
 public class Student {
     private String adminNumber;

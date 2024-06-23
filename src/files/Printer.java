@@ -6,7 +6,7 @@ package files;
 
 /**
  *
- * @author asher
+ * @author DIT/FT/2B/23 P2210979 reyes asher benedict calaminos
  */
 /**
  * This object simulates printers in real life where you send data to it and the printer prints it out
@@ -16,6 +16,8 @@ package files;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import java.io.File;
+import java.awt.Desktop;
 
 public class Printer extends StudentManagement {
    
@@ -23,6 +25,7 @@ public class Printer extends StudentManagement {
     private String individualStudentContent;
     private String allStudentClassData;
     private Integer index;
+    private String studentClass;
     // create getter and setter methods
     
     // inherit the properties from the parent class
@@ -38,6 +41,14 @@ public class Printer extends StudentManagement {
     
     public void setAllStudentContent(String allStudentContent) {
         this.allStudentContent = allStudentContent;
+    }
+
+    public String getStudentClass() {
+        return this.studentClass;
+    }
+
+    public void setStudentClass(String studentClass) {
+        this.studentClass = studentClass;
     }
     
     public Integer getIndex() {
@@ -64,7 +75,20 @@ public class Printer extends StudentManagement {
         this.allStudentClassData = allStudentClassData;
     }
     
-    
+    private void openFile(File file) {
+        if (Desktop.isDesktopSupported()) {
+            // check if desktop is supported
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                // Open the file with the default application
+                desktop.open(file);
+            } catch (IOException e) {
+                System.err.println("Error opening file: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Desktop is not supported on this platform.");
+        }
+    }
         
     
     /*
@@ -74,9 +98,11 @@ public class Printer extends StudentManagement {
         * such as .docx, .ppt, .xlsx, etc., as it could lead to data corruption.
         * These formats are complex and require specific libraries to handle them correctly.
         * The easiest file format for it to handle is .txt file, which is the notepad file format.
+        * It can be only be viewed outside this project sadly
         * No external specific libraries are required to handle .txt format
         * FileWriter object must be enclosed in a try catch as there is a unreported IO exception and must
         * be handled
+        * The printed file can be viewed by going to file explorer and opening the folder of this project
      */
     
      // prints out all the student data available in the school
@@ -90,12 +116,14 @@ public class Printer extends StudentManagement {
             fw.write(getAllStudentContent());
             printingSuccess();
             fw.close(); // to save resources
+            
+            openFile(new File(fileName));
         } catch (IOException e) {
             printingError();
         }
     }
     
-    // in progress
+    // do not touch
     public void printIndividualStudent() {
         String fileName = "";
         String fileNameTemplate = "data-of-student-%s.txt";
@@ -107,22 +135,28 @@ public class Printer extends StudentManagement {
             fw.write(getIndividualStudentContent());
             printingSuccess();
             fw.close();
+            openFile(new File(fileName));
         } catch (IOException e) {
             printingError();
         }
     }
    
+    // prints the data of the class that is inputted
     public void printAllStudentClass() {
         String fileName = "";
         String fileNameTemplate = "data-of-class-%s.txt";
-        String studentClass = students.get(index).getStudentClass();
+        //String studentClass = students.get(index).getStudentClass();
+        //String studentClass = getAllStudentClassData();
+        String studentClass = getStudentClass();
         fileName = String.format(fileNameTemplate, studentClass);
+        System.out.println(fileName);
         
         try {
             FileWriter fw = new FileWriter(fileName);
-            fw.write(this.allStudentClassData);
+            fw.write(getAllStudentClassData());
             printingSuccess();
             fw.close();
+            openFile(new File(fileName));
         } catch (IOException e) {
             printingError();
         } 

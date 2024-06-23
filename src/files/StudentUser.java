@@ -9,7 +9,8 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author asher
+ * @author DIT/FT/2B/23 P2210979 reyes asher benedict calaminos
+ * @author DIT/FT/2B/23 P2323150 Ng Yu Jie
  */
 
 /**
@@ -42,7 +43,6 @@ public class StudentUser {
     private static int displayEnquiryMenu() {
         String header = displayHeaderMessage();
         String options = "1. Display all students\n2. Search student by class\n3. Search student by name\n4. Back to Main Menu";
-
 
         String menuText = header + options;
         String getInput = JOptionPane.showInputDialog(null, menuText);
@@ -116,10 +116,10 @@ public class StudentUser {
                 sm.deleteStudent();
                 break;
             case 3:
-                sm.addModuleForStudent();
+                sm.addModuleForStudent();   
                 break;
             case 4:
-                displayPrintOutStudentStatisticMenu();
+                displayPrintOutStudentStatisticMenu(sm);
                 break;
             case 5:
                 // return back to menu
@@ -136,7 +136,7 @@ public class StudentUser {
             try {
                 String inputStr = JOptionPane.showInputDialog(message);
                 if (inputStr == null) {
-                    JOptionPane.showMessageDialog(null, errorMessage);
+                    return -1; // Treat cancel as invalid input
                 } else {
                     input = Double.parseDouble(inputStr);
                     if (input < 0) {
@@ -150,46 +150,81 @@ public class StudentUser {
         return input;
     }
     
-    private static void displayPrintOutStudentStatisticMenu() {
+    private static void displayPrintOutStudentStatisticMenu(StudentManagement sm) {
         String display = "";
         int input = 0;
         display = """
                   1. Print out individual student statistic
                   2. Print out class statistic
                   3. Print out all student statistics
+                  4. Back to Admin Menu
                   """;
-        input = Integer.parseInt(JOptionPane.showInputDialog(display));
-        handlePrintStudentStatisticMenu(input);
+
+        boolean valid = true;
+
+        while (valid) {
+            String userinput = JOptionPane.showInputDialog(display);
+            if (userinput == null) return; // back to admin menu
+            
+            try {
+                input = Integer.parseInt(userinput);
+                if (input < 1 || input > 4) {
+                    displayMenuErrorMesage();
+                    return;
+                } else {
+                    valid = false;
+                }
+            } catch (NumberFormatException e) {
+                displayMenuErrorMesage();
+                //return;
+            }
+        }
+        
+        handlePrintStudentStatisticMenu(input, sm);
     }
     
-    private static void handlePrintStudentStatisticMenu(int input) {
-        StudentManagement sm = new StudentManagement();
+    private static void handlePrintStudentStatisticMenu(int input, StudentManagement sm) {
         
-        /**
-         * The printer object is one of the advanced feature that was implemented
-         * The purpose of the printer is to... it's quite obvious: to print out the student content in a .txt file
-         * @author asher
-         * hardest part was really sm.getAllStudents();
-         */
         Printer print = new Printer();
         
         switch (input) {
             case 1:
                 ArrayList data = sm.getStudentByName();
-                print.setIndex(Integer.parseInt(data.get(0).toString()));
+                try {
+                    print.setIndex(Integer.parseInt(data.get(0).toString()));
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid name. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
+                } catch (IndexOutOfBoundsException e) {
+                    break;
+                }
                 print.setIndividualStudentContent(data.get(1).toString());
                 print.printIndividualStudent();
                 break;
             case 2:
-                print.setAllStudentClassData(sm.getStudentByClass());
+                ArrayList data2 = sm.getStudentByClass();
+                try {
+                    print.setIndex(Integer.parseInt(data2.get(0).toString()));
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid class. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
+                } catch (IndexOutOfBoundsException e) {
+                    break;
+                }
+                print.setStudentClass(data2.get(1).toString().replace("/", "-"));
                 print.printAllStudentClass();
                 break;
             case 3:
                 String allStudentsToPrint = sm.getAllStudents();
                 print.setAllStudentContent(allStudentsToPrint);
+                // for checking purposes
                 System.out.println(allStudentsToPrint);
                 System.out.println(allStudentsToPrint.length());
                 print.printAllStudents();
+                break;
+            case 4:
+                // return back to menu
                 break;
             default:
                 displayMenuErrorMesage();
@@ -197,7 +232,6 @@ public class StudentUser {
         }
     }
     
-    // makes life easier if a function is called for an error message
     public static void displayMenuErrorMesage() {
         JOptionPane.showMessageDialog(null, "Invalid option. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
     }
@@ -229,7 +263,9 @@ public class StudentUser {
                     break;
                 case 3:
                     double minGPA = getDoubleInput("Enter minimum GPA: ", "Invalid input. Please enter a valid GPA");
+                    if (minGPA == -1) break; // Back to main menu if cancel is pressed
                     double maxGPA = getDoubleInput("Enter maximum GPA: ", "Invalid input. Please enter a valid GPA");
+                    if (maxGPA == -1) break; // Back to main menu if cancel is pressed
                     sm.generateGPAReport(minGPA, maxGPA);
                     break;
                 case 4:
