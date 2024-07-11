@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author DIT/FT/2B/23 P2210979 reyes asher benedict calaminos
+ * @author DIT/FT/2B/23 P2210979 Reyes Asher Benedict Calaminos
  * @author DIT/FT/2B/23 P2323150 Ng Yu Jie
  */
 

@@ -6,7 +6,7 @@ package files;
 
 /**
  *
- * @author DIT/FT/2B/23 P2210979 reyes asher benedict calaminos
+ * @author DIT/FT/2B/23 P2210979 Reyes Asher Benedict Calaminos
  */
 /**
  * This object simulates printers in real life where you send data to it and the printer prints it out
