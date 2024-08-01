@@ -69,7 +69,7 @@ public class Student {
         double totalGradePoints = 0.0;
         
         for (Module module : modules) {
-            int gradePoints = getGradePoints(module.getMarks());
+            double gradePoints = getGradePoints((int) module.getMarks());
             totalCreditUnits += module.getCreditUnit();
             totalGradePoints += gradePoints * module.getCreditUnit();
         }

@@ -13,9 +13,9 @@ public class Module {
     private String moduleCode;
     private String moduleName;
     private int creditUnit;
-    private int marks;
+    private double marks;
 
-    public Module(String moduleCode, String moduleName, int creditUnit, int marks) {
+    public Module(String moduleCode, String moduleName, int creditUnit, double marks) {
         this.moduleCode = moduleCode;
         this.moduleName = moduleName;
         this.creditUnit = creditUnit;
@@ -46,13 +46,14 @@ public class Module {
         this.creditUnit = creditUnit;
     }
 
-    public int getMarks() {
-        return marks;
-    }
-
     public void setMarks(int marks) {
         this.marks = marks;
     }
+
+    public double getMarks() {
+        return marks;
+    }
+    
 
     @Override
     public String toString() {

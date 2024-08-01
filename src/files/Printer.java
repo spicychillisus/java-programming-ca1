@@ -10,6 +10,8 @@ package files;
  */
 /**
  * This object simulates printers in real life where you send data to it and the printer prints it out
+ * 
+ * Designed as an advanced feature for CA1, this feature is now being used as a File output for students to print their results for CA2.
  * @author spicychilisus
  */
 
