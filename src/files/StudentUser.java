@@ -22,10 +22,13 @@ import java.io.IOException;
 public class StudentUser {
     
     public static void main(String[] args) {
-        ScanFile sf = new ScanFile("student.txt");
+        ScanFile sf = new ScanFile();
         try {
-            sf.fileReader("student.txt");
+            sf.fileReader("students.txt");
+            sf.sectionData();
         } catch (IOException e) {
+            e.getMessage();
+        } catch (ArrayIndexOutOfBoundsException e) {
             e.getMessage();
         }
         

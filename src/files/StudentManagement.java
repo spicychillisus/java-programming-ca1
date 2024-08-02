@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 public class StudentManagement {
     protected ArrayList<Student> students = new ArrayList<>();
+    private ScanFile scan;
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -47,7 +48,6 @@ public class StudentManagement {
     public StudentManagement() {
         // member A
         // Adding dummy student data
-        students = new ArrayList<>(); // Initialize the students list
 
         // Adding student data with modules
         Student student1 = new Student("p1234567", "John Tan", "DIT/FT/2A/02");

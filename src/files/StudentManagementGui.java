@@ -23,6 +23,7 @@ public class StudentManagementGui extends JFrame {
             System.exit(0);
         });
         gpaField.setEditable(false);
+        resultText.setEditable(false);
         radioButtonGroup.add(adminRadioBtn);
         radioButtonGroup.add(nameRadioBtn);
     }
@@ -36,20 +37,20 @@ public class StudentManagementGui extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        studentTxt = new javax.swing.JLabel();
+        nameTxt = new javax.swing.JLabel();
+        admTxt = new javax.swing.JLabel();
+        classTxt = new javax.swing.JLabel();
+        gpaTxt = new javax.swing.JLabel();
+        moduleTxt = new javax.swing.JLabel();
+        modCodeTxt = new javax.swing.JLabel();
+        modNameTxt = new javax.swing.JLabel();
+        marksTxt = new javax.swing.JLabel();
+        creditsTxt = new javax.swing.JLabel();
+        searchTxt = new javax.swing.JLabel();
         adminRadioBtn = new javax.swing.JRadioButton();
         nameRadioBtn = new javax.swing.JRadioButton();
-        jLabel12 = new javax.swing.JLabel();
+        resultsTxt = new javax.swing.JLabel();
         createStudentBtn = new javax.swing.JButton();
         deleteStudentBtn = new javax.swing.JButton();
         addModuleBtn = new javax.swing.JButton();
@@ -70,33 +71,43 @@ public class StudentManagementGui extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("student admin system");
 
-        jLabel1.setText("Student");
+        studentTxt.setText("Student");
 
-        jLabel2.setText("Name:");
+        nameTxt.setText("Name:");
 
-        jLabel3.setText("Admin:");
+        admTxt.setText("Admin:");
 
-        jLabel4.setText("Class:");
+        classTxt.setText("Class:");
 
-        jLabel5.setText("GPA:");
+        gpaTxt.setText("GPA:");
 
-        jLabel6.setText("Module");
+        moduleTxt.setText("Module");
 
-        jLabel7.setText("Mod Code:");
+        modCodeTxt.setText("Mod Code:");
 
-        jLabel8.setText("Mod Name:");
+        modNameTxt.setText("Mod Name:");
 
-        jLabel9.setText("Marks");
+        marksTxt.setText("Marks");
 
-        jLabel10.setText("Credit");
+        creditsTxt.setText("Credit");
 
-        jLabel11.setText("Search");
+        searchTxt.setText("Search");
 
         adminRadioBtn.setText("By Admin");
+        adminRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminRadioBtnActionPerformed(evt);
+            }
+        });
 
         nameRadioBtn.setText("By Name");
+        nameRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameRadioBtnActionPerformed(evt);
+            }
+        });
 
-        jLabel12.setText("Results");
+        resultsTxt.setText("Results");
 
         createStudentBtn.setText("Create");
         createStudentBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -142,14 +153,14 @@ public class StudentManagementGui extends JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(nameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(admTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(creditsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(classTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(gpaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(modNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(0, 134, Short.MAX_VALUE)))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
@@ -168,11 +179,11 @@ public class StudentManagementGui extends JFrame {
                                         .addComponent(modCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(studentTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(marksTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(modCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(0, 0, Short.MAX_VALUE)))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(moduleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
@@ -184,7 +195,7 @@ public class StudentManagementGui extends JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(64, 64, 64)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(resultsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addContainerGap())
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addGap(44, 44, 44)
@@ -199,7 +210,7 @@ public class StudentManagementGui extends JFrame {
                                     .addGap(25, 25, 25)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(185, 185, 185))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -211,16 +222,16 @@ public class StudentManagementGui extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(93, 93, 93)
-                .addComponent(jLabel1)
+                .addComponent(studentTxt)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel11)
+                    .addComponent(nameTxt)
+                    .addComponent(searchTxt)
                     .addComponent(createStudentBtn)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(admTxt)
                     .addComponent(adminRadioBtn)
                     .addComponent(nameRadioBtn)
                     .addComponent(deleteStudentBtn)
@@ -229,11 +240,11 @@ public class StudentManagementGui extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
+                            .addComponent(classTxt)
                             .addComponent(classField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(gpaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(gpaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -242,31 +253,31 @@ public class StudentManagementGui extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel12)
+                        .addComponent(resultsTxt)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(resultScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(exitBtn))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(moduleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(modCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(modCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(addModuleBtn))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
+                            .addComponent(modNameTxt)
                             .addComponent(modNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
+                            .addComponent(marksTxt)
                             .addComponent(markField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(creditsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -275,19 +286,26 @@ public class StudentManagementGui extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void createStudentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createStudentBtnActionPerformed
-     String name = nameField.getText().trim();
-        String adminNumber = admField.getText().trim();
-        String studentClass = classField.getText().trim();
+    String name = nameField.getText().trim();
+    String adminNumber = admField.getText().trim();
+    String studentClass = classField.getText().trim();
 
-        if (name.isEmpty() || adminNumber.isEmpty() || studentClass.isEmpty()) {
-            showError("Name, Admin Number, and Class are compulsory fields!");
+    if (name.isEmpty() || adminNumber.isEmpty() || studentClass.isEmpty()) {
+        showError("Name, Admin Number, and Class are compulsory fields!");
+        return;
+    }
+
+    // Check for duplicate admin number
+    for (Student student : studentManagement.getStudents()) {
+        if (student.getAdminNumber().equals(adminNumber)) {
+            showError("A student with this Admin Number already exists!");
             return;
-        }
-
-        Student student = new Student(adminNumber, name, studentClass);
-        studentManagement.getStudents().add(student);
-        clearFields();
-        showMessage("Student created successfully!");
+              }
+            }
+    Student student = new Student(adminNumber, name, studentClass);
+    studentManagement.getStudents().add(student);
+    clearFields();
+    showMessage("Student created successfully!");
     }//GEN-LAST:event_createStudentBtnActionPerformed
     
     private void deleteStudentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentBtnActionPerformed
@@ -334,37 +352,62 @@ public class StudentManagementGui extends JFrame {
     }//GEN-LAST:event_addModuleBtnActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
-    String searchTerm = searchField.getText().trim();
-    ArrayList<Student> students = studentManagement.getStudents();
-    boolean found = false;
+        String searchTerm = searchField.getText().trim();
+        ArrayList<Student> students = studentManagement.getStudents();
+        ArrayList<Student> matchingStudents = new ArrayList<>();
 
-    for (Student student : students) {
-        if ((adminRadioBtn.isSelected() && student.getAdminNumber().equals(searchTerm)) ||
-            (nameRadioBtn.isSelected() && student.getName().equals(searchTerm))) {
-
-            selectedStudent = student;
-            nameField.setText(student.getName());
-            admField.setText(student.getAdminNumber());
-            classField.setText(student.getStudentClass());
-            gpaField.setText(String.valueOf(student.getGPA()));
-            clearModuleFields();
-            resultText.setText(""); // Clear previous results
-            found = true;
-            break;
+        for (Student student : students) {
+            if ((adminRadioBtn.isSelected() && student.getAdminNumber().equals(searchTerm)) ||
+                (nameRadioBtn.isSelected() && student.getName().equalsIgnoreCase(searchTerm))) {
+                matchingStudents.add(student);
+            }
         }
-    }
 
-    if (!found) {
-        SwingUtilities.invokeLater(() -> {
-            resultText.setText("Class cannot be found!");
+        if (matchingStudents.size() == 1) {
+            // Only one student found
+            selectedStudent = matchingStudents.get(0);
+            displayStudent(selectedStudent);
+        } else if (matchingStudents.size() > 1) {
+            // Multiple students found
+            String adminNumber = JOptionPane.showInputDialog(this, 
+                "Multiple students found with this name. Please enter the Admin Number:");
+            if (adminNumber != null && !adminNumber.trim().isEmpty()) {
+                for (Student student : matchingStudents) {
+                    if (student.getAdminNumber().equals(adminNumber.trim())) {
+                        selectedStudent = student;
+                        displayStudent(selectedStudent);
+                        return;
+                    }
+                }
+                showError("No student found with the provided Admin Number.");
+            } else {
+                showError("Admin Number is required to identify the student.");
+            }
+        } else {
+            // No student found
+            clearAllFields();
+            resultText.setText("Student cannot be found!");
             resultScrollPane.revalidate();
             resultScrollPane.repaint();
-        });
-    } else {
-        resultText.setText(""); // Clear result if student is found
         }
     }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void adminRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminRadioBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_adminRadioBtnActionPerformed
+
+    private void nameRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameRadioBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameRadioBtnActionPerformed
  
+        private void displayStudent(Student student) {
+        nameField.setText(student.getName());
+        admField.setText(student.getAdminNumber());
+        classField.setText(student.getStudentClass());
+        gpaField.setText(String.valueOf(student.getGPA()));
+        clearModuleFields();
+        resultText.setText(""); // Clear previous results
+    }
     
     private void clearFields() {
         nameField.setText("");
@@ -439,34 +482,34 @@ public class StudentManagementGui extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addModuleBtn;
     private javax.swing.JTextField admField;
+    private javax.swing.JLabel admTxt;
     private javax.swing.JRadioButton adminRadioBtn;
     private javax.swing.JTextField classField;
+    private javax.swing.JLabel classTxt;
     private javax.swing.JButton createStudentBtn;
     private javax.swing.JTextField creditField;
+    private javax.swing.JLabel creditsTxt;
     private javax.swing.JButton deleteStudentBtn;
     private javax.swing.JButton exitBtn;
     private javax.swing.JTextField gpaField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel gpaTxt;
     private javax.swing.JTextField markField;
+    private javax.swing.JLabel marksTxt;
     private javax.swing.JTextField modCodeField;
+    private javax.swing.JLabel modCodeTxt;
     private javax.swing.JTextField modNameField;
+    private javax.swing.JLabel modNameTxt;
+    private javax.swing.JLabel moduleTxt;
     private javax.swing.JTextField nameField;
     private javax.swing.JRadioButton nameRadioBtn;
+    private javax.swing.JLabel nameTxt;
     private javax.swing.JScrollPane resultScrollPane;
     private javax.swing.JTextArea resultText;
+    private javax.swing.JLabel resultsTxt;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchField;
+    private javax.swing.JLabel searchTxt;
+    private javax.swing.JLabel studentTxt;
     // End of variables declaration//GEN-END:variables
 }
 

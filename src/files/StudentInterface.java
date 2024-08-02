@@ -9,9 +9,12 @@ package files;
  * @author asher
  */
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+import java.io.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 public class StudentInterface extends javax.swing.JFrame {
 
@@ -23,12 +26,19 @@ public class StudentInterface extends javax.swing.JFrame {
     private StudentManagement sm;
     private Module module;
     private ScanFile scan;
-    private ArrayList<Student> allStudents;
+    private ArrayList<Student> allStudents; // contains all the student data scanned from the .txt file
+    private ArrayList<Module> studModules; // contains the modules each student is taking
     private ButtonGroup bg = new ButtonGroup();
+    private MainMenu mainMenu;
+    private Integer index; // for the display panels
+    private Integer timeDelay;
+    
     
     
     public StudentInterface() {
         initComponents();
+        
+        this.scan = new ScanFile();
         
         // disable editing
         studentNameDisplay.setEditable(false);
@@ -39,6 +49,40 @@ public class StudentInterface extends javax.swing.JFrame {
         // add the radio button filters to a button gorup
         studentSearchFilter.add(filterByClassSearch);
         studentSearchFilter.add(filterByNameSearch);
+        
+        // clear all the displays
+        studentNameDisplay.setText("");
+        studentClassDisplay.setText("");
+        adminNumberDisplay.setText("");
+        gpaDisplay.setText("");
+        modCodeDisplay.setText("");
+        modNameDisplay.setText("");
+        modMarksDisplay.setText("");
+        modCredUnitDisplay.setText("");
+        modGradeDisplay.setText("");
+        
+        // disable all radios
+        filterByClassSearch.setEnabled(true);
+        filterByNameSearch.setEnabled(true);
+        
+        // detect when this window closes
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter(){
+            public void windowClose(WindowEvent e) {
+                int res = JOptionPane.showConfirmDialog(
+                        null,
+                        "Exit the student menu?",
+                        "Exit",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if (res == JOptionPane.YES_OPTION) {
+                    setVisible(false);
+                    mainMenu.setVisible(true);
+                }
+            }
+        });
+        
     }
 
     /**
@@ -70,6 +114,7 @@ public class StudentInterface extends javax.swing.JFrame {
         allStudGPADisplay = new javax.swing.JTextField();
         allStudNextBtn = new javax.swing.JButton();
         allStudPrevBtn = new javax.swing.JButton();
+        studentDropdownBtn = new javax.swing.JComboBox<>();
         allStudentModuleDisplayPanel = new javax.swing.JPanel();
         allStudModCode = new javax.swing.JTextField();
         allStudModLabel = new javax.swing.JLabel();
@@ -83,6 +128,7 @@ public class StudentInterface extends javax.swing.JFrame {
         allStudModPrev = new javax.swing.JButton();
         allStudGradeLabel = new javax.swing.JLabel();
         allStudGradeDisplay = new javax.swing.JTextField();
+        moduleDropDown = new javax.swing.JComboBox<>();
         allStudentRefreshBtn = new javax.swing.JButton();
         allStudDisplayRemarksPanel = new javax.swing.JPanel();
         displayRemarksScrollPane = new javax.swing.JScrollPane();
@@ -105,23 +151,26 @@ public class StudentInterface extends javax.swing.JFrame {
         gpaDisplay = new javax.swing.JTextField();
         nextBtn = new javax.swing.JButton();
         prevBtn = new javax.swing.JButton();
+        clearStudDetails = new javax.swing.JButton();
         moduleDisplayPanel = new javax.swing.JPanel();
-        studentNameDisplay1 = new javax.swing.JTextField();
-        studentNameDisplayLabel1 = new javax.swing.JLabel();
-        studentClassDisplay1 = new javax.swing.JTextField();
-        studentClassDisplayLabel1 = new javax.swing.JLabel();
-        adminNumberDisplayLabel1 = new javax.swing.JLabel();
-        adminNumberDisplay1 = new javax.swing.JTextField();
-        gpaDisplayLabel1 = new javax.swing.JLabel();
-        gpaDisplay1 = new javax.swing.JTextField();
+        modCodeDisplay = new javax.swing.JTextField();
+        modCodeLabel = new javax.swing.JLabel();
+        modNameDisplay = new javax.swing.JTextField();
+        modNameLabel = new javax.swing.JLabel();
+        modMarksLabel = new javax.swing.JLabel();
+        modMarksDisplay = new javax.swing.JTextField();
+        modCredUnitLabel = new javax.swing.JLabel();
+        modCredUnitDisplay = new javax.swing.JTextField();
         modCordNext = new javax.swing.JButton();
         modCordPrev = new javax.swing.JButton();
-        gradeLabel = new javax.swing.JLabel();
-        gradeLabelDisplay = new javax.swing.JTextField();
+        modGradeLabel = new javax.swing.JLabel();
+        modGradeDisplay = new javax.swing.JTextField();
         searchBtn = new javax.swing.JButton();
         searchRemarks = new javax.swing.JPanel();
         remarksScrollPane = new javax.swing.JScrollPane();
         remarksTextPane = new javax.swing.JTextPane();
+        clearSearchBarBtn = new javax.swing.JButton();
+        printerPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,7 +200,7 @@ public class StudentInterface extends javax.swing.JFrame {
             DescriptionTextPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DescriptionTextPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(text, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                .addComponent(text, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -231,6 +280,13 @@ public class StudentInterface extends javax.swing.JFrame {
             }
         });
 
+        studentDropdownBtn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student 1", "Student 2", "Student 3", "Student 4", "Student 1", "Student 2", "Student 3", "Student 4", "Student 1", "Student 2", "Student 3", "Student 4" }));
+        studentDropdownBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentDropdownBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout allStudentDisplayPanelLayout = new javax.swing.GroupLayout(allStudentDisplayPanel);
         allStudentDisplayPanel.setLayout(allStudentDisplayPanelLayout);
         allStudentDisplayPanelLayout.setHorizontalGroup(
@@ -250,11 +306,14 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addGroup(allStudentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(allStudNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(allStudClassLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(allStudDisplayName, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(allStudClassDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(allStudAdminNum)
                             .addComponent(allStudAdminNumDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(allStudentDisplayPanelLayout.createSequentialGroup()
+                        .addComponent(allStudDisplayName, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(studentDropdownBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         allStudentDisplayPanelLayout.setVerticalGroup(
@@ -262,7 +321,9 @@ public class StudentInterface extends javax.swing.JFrame {
             .addGroup(allStudentDisplayPanelLayout.createSequentialGroup()
                 .addComponent(allStudNameLabel)
                 .addGap(3, 3, 3)
-                .addComponent(allStudDisplayName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(allStudentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(allStudDisplayName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(studentDropdownBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(allStudClassLabel)
                 .addGap(3, 3, 3)
@@ -343,6 +404,8 @@ public class StudentInterface extends javax.swing.JFrame {
             }
         });
 
+        moduleDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4", "Item 1", "Item 2", "Item 3", "Item 4", "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout allStudentModuleDisplayPanelLayout = new javax.swing.GroupLayout(allStudentModuleDisplayPanel);
         allStudentModuleDisplayPanel.setLayout(allStudentModuleDisplayPanelLayout);
         allStudentModuleDisplayPanelLayout.setHorizontalGroup(
@@ -355,23 +418,23 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addComponent(allStudModPrev)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(allStudModNext))
+                    .addComponent(allStudModMarksDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(allStudentModuleDisplayPanelLayout.createSequentialGroup()
                         .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(allStudModMarksDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(allStudModCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(allStudModLabel)
+                            .addComponent(allStudModNameLabel)
+                            .addComponent(allStudModName, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(alStudModMarksLabel))
+                        .addGap(34, 34, 34)
+                        .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(allStudGradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(allStudCreditUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(allStudGradeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(allStudentModuleDisplayPanelLayout.createSequentialGroup()
-                                .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(allStudModCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(allStudModLabel)
-                                    .addComponent(allStudModNameLabel)
-                                    .addComponent(allStudModName, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(alStudModMarksLabel))
-                                .addGap(34, 34, 34)
-                                .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(allStudGradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(allStudCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(allStudCreditUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(allStudGradeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(allStudCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(moduleDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         allStudentModuleDisplayPanelLayout.setVerticalGroup(
@@ -394,12 +457,14 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(allStudCreditUnitLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(allStudCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(allStudCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(moduleDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(allStudGradeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(allStudGradeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                 .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(allStudModNext)
                     .addComponent(allStudModPrev))
@@ -427,6 +492,8 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        allStudentRefreshBtn.setBackground(new java.awt.Color(153, 153, 255));
+        allStudentRefreshBtn.setForeground(new java.awt.Color(0, 0, 0));
         allStudentRefreshBtn.setText("Refresh");
         allStudentRefreshBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -544,6 +611,11 @@ public class StudentInterface extends javax.swing.JFrame {
 
         studentNameDisplay.setEditable(false);
         studentNameDisplay.setText("student name");
+        studentNameDisplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentNameDisplayActionPerformed(evt);
+            }
+        });
 
         studentNameDisplayLabel.setText("Name");
 
@@ -591,6 +663,13 @@ public class StudentInterface extends javax.swing.JFrame {
             }
         });
 
+        clearStudDetails.setText("Clear Details");
+        clearStudDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearStudDetailsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout studentDisplayPanelLayout = new javax.swing.GroupLayout(studentDisplayPanel);
         studentDisplayPanel.setLayout(studentDisplayPanelLayout);
         studentDisplayPanelLayout.setHorizontalGroup(
@@ -599,28 +678,34 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(studentDisplayPanelLayout.createSequentialGroup()
-                        .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(studentNameDisplayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(studentClassDisplayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(studentNameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(adminNumberDisplayLabel)
-                            .addComponent(adminNumberDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(studentClassDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 208, Short.MAX_VALUE))
-                    .addGroup(studentDisplayPanelLayout.createSequentialGroup()
                         .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(gpaDisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(gpaDisplayLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(prevBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nextBtn)))
+                        .addComponent(nextBtn))
+                    .addGroup(studentDisplayPanelLayout.createSequentialGroup()
+                        .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(studentClassDisplayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(studentNameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminNumberDisplayLabel)
+                            .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(adminNumberDisplay, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(studentClassDisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(studentDisplayPanelLayout.createSequentialGroup()
+                        .addComponent(studentNameDisplayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(clearStudDetails)))
                 .addContainerGap())
         );
         studentDisplayPanelLayout.setVerticalGroup(
             studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(studentDisplayPanelLayout.createSequentialGroup()
-                .addComponent(studentNameDisplayLabel)
+                .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(studentNameDisplayLabel)
+                    .addComponent(clearStudDetails))
                 .addGap(3, 3, 3)
                 .addComponent(studentNameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -642,43 +727,43 @@ public class StudentInterface extends javax.swing.JFrame {
                     .addGroup(studentDisplayPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(gpaDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         moduleDisplayPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Module 0 out of 0"));
 
-        studentNameDisplay1.setEditable(false);
-        studentNameDisplay1.setText("ST0509");
+        modCodeDisplay.setEditable(false);
+        modCodeDisplay.setText("ST0509");
 
-        studentNameDisplayLabel1.setText("Module Code");
+        modCodeLabel.setText("Module Code");
 
-        studentClassDisplay1.setEditable(false);
-        studentClassDisplay1.setText("Java Programming");
-        studentClassDisplay1.addActionListener(new java.awt.event.ActionListener() {
+        modNameDisplay.setEditable(false);
+        modNameDisplay.setText("Java Programming");
+        modNameDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                studentClassDisplay1ActionPerformed(evt);
+                modNameDisplayActionPerformed(evt);
             }
         });
 
-        studentClassDisplayLabel1.setText("Module Name");
+        modNameLabel.setText("Module Name");
 
-        adminNumberDisplayLabel1.setText("Marks");
+        modMarksLabel.setText("Marks");
 
-        adminNumberDisplay1.setEditable(false);
-        adminNumberDisplay1.setText("100");
-        adminNumberDisplay1.addActionListener(new java.awt.event.ActionListener() {
+        modMarksDisplay.setEditable(false);
+        modMarksDisplay.setText("100");
+        modMarksDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminNumberDisplay1ActionPerformed(evt);
+                modMarksDisplayActionPerformed(evt);
             }
         });
 
-        gpaDisplayLabel1.setText("Credit Units");
+        modCredUnitLabel.setText("Credit Units");
 
-        gpaDisplay1.setEditable(false);
-        gpaDisplay1.setText("34");
-        gpaDisplay1.addActionListener(new java.awt.event.ActionListener() {
+        modCredUnitDisplay.setEditable(false);
+        modCredUnitDisplay.setText("34");
+        modCredUnitDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gpaDisplay1ActionPerformed(evt);
+                modCredUnitDisplayActionPerformed(evt);
             }
         });
 
@@ -696,13 +781,13 @@ public class StudentInterface extends javax.swing.JFrame {
             }
         });
 
-        gradeLabel.setText("Grade");
+        modGradeLabel.setText("Grade");
 
-        gradeLabelDisplay.setEditable(false);
-        gradeLabelDisplay.setText("DIST");
-        gradeLabelDisplay.addActionListener(new java.awt.event.ActionListener() {
+        modGradeDisplay.setEditable(false);
+        modGradeDisplay.setText("DIST");
+        modGradeDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gradeLabelDisplayActionPerformed(evt);
+                modGradeDisplayActionPerformed(evt);
             }
         });
 
@@ -717,56 +802,54 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(modCordPrev)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(modCordNext))
+                        .addComponent(modCordNext)
+                        .addContainerGap())
                     .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
-                        .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(adminNumberDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
-                                .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(studentNameDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(studentNameDisplayLabel1)
-                                    .addComponent(studentClassDisplayLabel1)
-                                    .addComponent(studentClassDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(adminNumberDisplayLabel1))
-                                .addGap(34, 34, 34)
-                                .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(gradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gpaDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gpaDisplayLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gradeLabelDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(modCodeLabel)
+                            .addComponent(modNameLabel)
+                            .addComponent(modMarksLabel)
+                            .addComponent(modNameDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                            .addComponent(modCodeDisplay)
+                            .addComponent(modMarksDisplay))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(modGradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modCredUnitLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(modCredUnitDisplay)
+                            .addComponent(modGradeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(154, 154, 154))))
         );
         moduleDisplayPanelLayout.setVerticalGroup(
             moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
                 .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
-                        .addComponent(studentNameDisplayLabel1)
+                        .addComponent(modCodeLabel)
                         .addGap(3, 3, 3)
-                        .addComponent(studentNameDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(modCodeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(studentClassDisplayLabel1)
+                        .addComponent(modNameLabel)
                         .addGap(3, 3, 3)
-                        .addComponent(studentClassDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(modNameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(adminNumberDisplayLabel1)
-                        .addGap(3, 3, 3)
-                        .addComponent(adminNumberDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(modCordNext)
-                            .addComponent(modCordPrev)))
+                        .addComponent(modMarksLabel))
                     .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(gpaDisplayLabel1)
+                        .addComponent(modCredUnitLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gpaDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(modCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(gradeLabel)
+                        .addComponent(modGradeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gradeLabelDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(modGradeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(3, 3, 3)
+                .addComponent(modMarksDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modCordNext)
+                    .addComponent(modCordPrev))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout studentSearchResultsLayout = new javax.swing.GroupLayout(studentSearchResults);
@@ -777,17 +860,17 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(studentSearchResultsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(studentDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(moduleDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(moduleDisplayPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         studentSearchResultsLayout.setVerticalGroup(
             studentSearchResultsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(studentSearchResultsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(studentDisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(studentDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(moduleDisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         searchBtn.setText("Search");
@@ -818,6 +901,13 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        clearSearchBarBtn.setText("Clear Search");
+        clearSearchBarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearSearchBarBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SearchStudentsPanelLayout = new javax.swing.GroupLayout(SearchStudentsPanel);
         SearchStudentsPanel.setLayout(SearchStudentsPanelLayout);
         SearchStudentsPanelLayout.setHorizontalGroup(
@@ -828,10 +918,12 @@ public class StudentInterface extends javax.swing.JFrame {
                     .addComponent(studentSearchResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(searchBar, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SearchStudentsPanelLayout.createSequentialGroup()
-                        .addGroup(SearchStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(searchHeaderText, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(searchHeaderText, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(SearchStudentsPanelLayout.createSequentialGroup()
+                        .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(386, 386, 386)
+                        .addComponent(clearSearchBarBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(SearchStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(searchFilterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -848,7 +940,9 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchBtn)
+                        .addGroup(SearchStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchBtn)
+                            .addComponent(clearSearchBarBtn))
                         .addGap(6, 6, 6))
                     .addComponent(searchFilterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -859,6 +953,19 @@ public class StudentInterface extends javax.swing.JFrame {
         );
 
         Main.addTab("Search", SearchStudentsPanel);
+
+        javax.swing.GroupLayout printerPanelLayout = new javax.swing.GroupLayout(printerPanel);
+        printerPanel.setLayout(printerPanelLayout);
+        printerPanelLayout.setHorizontalGroup(
+            printerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 870, Short.MAX_VALUE)
+        );
+        printerPanelLayout.setVerticalGroup(
+            printerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 656, Short.MAX_VALUE)
+        );
+
+        Main.addTab("Export Data", printerPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -880,24 +987,171 @@ public class StudentInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void clearFields() {
+    private void clearSearchFields() {
+        studentNameDisplay.setText("");
+        studentClassDisplay.setText("");
+        adminNumberDisplay.setText("");
+        gpaDisplay.setText("");
+        modCodeDisplay.setText("");
+        modNameDisplay.setText("");
+        modMarksDisplay.setText("");
+        modCredUnitDisplay.setText("");
+        modGradeDisplay.setText("");
+        
+        filterByClassSearch.setSelected(false);
+        filterByNameSearch.setSelected(false);
+    }
     
-}
+    private void getAllData() {
+        // get the data from the students.txt file
+        try {
+            scan.fileReader("students.txt");
+            scan.sectionData();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+        
+    }
+    
+    private void textTimer(double delay) {
+        /**
+         * The time should be set in seconds
+         */
+        int timerMs = (int)delay * 1000;
+        Timer timer = new Timer(timerMs, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    remarksTextPane.setText("");
+                }
+            });
+            
+            timer.setRepeats(false);
+            timer.start();
+    }
+    
+    private boolean checkSearchContent(String searchContent) {
+        
+        boolean textDetected = true;
+        
+        if ("".equals(searchContent)) {
+            // if there is no text in the search bar, return false
+            textTimer(1);
+            
+            textDetected = false;
+            
+        }
+        
+        return textDetected;
+    }
+    
+    private String noFilter() {
+        String noFilterText = "Please select a filter!";
+        return noFilterText;
+    }
+    
+    String studentName = "";
+    String studentClass = "";
+    String studentAdminNumber = "";
+    String studentGPA = "";
+    String studentModuleCode = "";
+    String studentModuleName = "";
+    String studentModuleMarks = "";
+    String studentModuleCreditUnit = "";
+    String studentModuleGradeDisplay = "";
+    
     
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
         // TODO add your handling code here:
         // display results based on filter
         // both filters cannot be enabled in the same time
         String searchContent = searchBar.getText();
-        String studentDisplayMsg = "";
-        String classDisplayMsg = "";
+        getAllData();
         
+        String studentNameDisplayFormat = "Details for Student %s has been displayed.";
+        String classDisplayFormat = "Details for Class %s has been displayed.";
+        String studDisplayPanelTextFormat = "Student %d out of %d";
+        String modDisplayPaneTextFormat = "Module %d out of %d";
+        
+        if (filterByClassSearch.isSelected()) {
+
+            if ("".equals(searchContent)) {
+                System.out.println("class search ready but no input!");
+                remarksTextPane.setText("Please enter a class to search.");
+                textTimer(2);
+            } else {
+                // display data from the class
+                
+                // dummy data (for test)
+                remarksTextPane.setText("Details for Class DIT/FT/2B/23 has been displayed.");
+                textTimer(2.5);
+                
+                studentNameDisplay.setText("Kim Minji");
+                studentClassDisplay.setText("DIT/FT/2B/23");
+                adminNumberDisplay.setText("2311009");
+                gpaDisplay.setText("3.5");
+                
+                modCodeDisplay.setText("EP0808");
+                modNameDisplay.setText("Introduction to Music Production");
+                modMarksDisplay.setText("76");
+                modCredUnitDisplay.setText("6");
+                modGradeDisplay.setText("B+");
+                
+                // panel title change
+                changeTitledBorderText(studentDisplayPanel, "Student 1 out of 5");
+                changeTitledBorderText(moduleDisplayPanel, "Module 1 out of 20");
+
+                
+            }
+        } else if (filterByNameSearch.isSelected()) {
+            
+            
+
+            if ("".equals(searchContent)) {
+                System.out.println("name search ready but no input!");
+                remarksTextPane.setText("Please enter a student name to search.");
+                textTimer(2);
+            } else {
+                // display data based on the name entered
+                // if there are 2 people with the same name, both will be displayed (please remember your own admin number)
+                
+                // dummy data
+                remarksTextPane.setText("Details for Student Pham Hanni has been displayed.");
+                textTimer(2.5);
+                
+                studentNameDisplay.setText("Pham Hanni");
+                studentClassDisplay.setText("DAAA/FT/1B/23");
+                adminNumberDisplay.setText("2311008");
+                gpaDisplay.setText("2.2");
+                
+                modCodeDisplay.setText("ST1501");
+                modNameDisplay.setText("DELE");
+                modMarksDisplay.setText("76");
+                modCredUnitDisplay.setText("6");
+                modGradeDisplay.setText("B+");
+                
+                // panel title change
+                changeTitledBorderText(studentDisplayPanel, "Student 1 out of 1");
+                changeTitledBorderText(moduleDisplayPanel, "Module 1 out of 8");
+            }
+        } else {
+            remarksTextPane.setText(noFilter());
+            textTimer(2);
+        }
         
         
         
         
     }//GEN-LAST:event_searchBtnActionPerformed
    
+    private void changeTitledBorderText(javax.swing.JPanel studentDisplayPanel, String newTitle) {
+        Border border = studentDisplayPanel.getBorder();
+        if (border instanceof TitledBorder) {
+            TitledBorder tb = (TitledBorder) border;
+            tb.setTitle(newTitle);
+            studentDisplayPanel.repaint();
+        }
+    }
+    
     private void studentClassDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentClassDisplayActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_studentClassDisplayActionPerformed
@@ -914,13 +1168,13 @@ public class StudentInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_prevBtnActionPerformed
 
-    private void studentClassDisplay1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentClassDisplay1ActionPerformed
+    private void modNameDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modNameDisplayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_studentClassDisplay1ActionPerformed
+    }//GEN-LAST:event_modNameDisplayActionPerformed
 
-    private void gpaDisplay1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gpaDisplay1ActionPerformed
+    private void modCredUnitDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCredUnitDisplayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_gpaDisplay1ActionPerformed
+    }//GEN-LAST:event_modCredUnitDisplayActionPerformed
 
     private void modCordNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCordNextActionPerformed
         // TODO add your handling code here:
@@ -930,13 +1184,13 @@ public class StudentInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_modCordPrevActionPerformed
 
-    private void adminNumberDisplay1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminNumberDisplay1ActionPerformed
+    private void modMarksDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modMarksDisplayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_adminNumberDisplay1ActionPerformed
+    }//GEN-LAST:event_modMarksDisplayActionPerformed
 
-    private void gradeLabelDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeLabelDisplayActionPerformed
+    private void modGradeDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modGradeDisplayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_gradeLabelDisplayActionPerformed
+    }//GEN-LAST:event_modGradeDisplayActionPerformed
 
     private void allStudClassDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allStudClassDisplayActionPerformed
         // TODO add your handling code here:
@@ -1004,40 +1258,79 @@ public class StudentInterface extends javax.swing.JFrame {
         // filter the search by name
     }//GEN-LAST:event_filterByNameSearchActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void studentDropdownBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentDropdownBtnActionPerformed
+        // TODO add your handling code here:
+        // for every new student add a model
+    }//GEN-LAST:event_studentDropdownBtnActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StudentInterface().setVisible(true);
-            }
-        });
-    }
+    private void clearStudDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearStudDetailsActionPerformed
+        // TODO add your handling code here:
+        clearSearchFields();
+        changeTitledBorderText(studentDisplayPanel, "Student 0 out of 0");
+        remarksTextPane.setText("All panels cleared!");
+        
+        
+    }//GEN-LAST:event_clearStudDetailsActionPerformed
+
+    private void clearSearchBarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchBarBtnActionPerformed
+        // TODO add your handling code here:
+        searchBar.setText("");
+        
+        filterByClassSearch.setSelected(false);
+        filterByNameSearch.setSelected(false);
+        
+        
+        
+        remarksTextPane.setText("Search filters cleared!");
+        Timer timer = new Timer(2000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    remarksTextPane.setText("");
+                }
+            });
+            
+            timer.setRepeats(false);
+            timer.start();
+    }//GEN-LAST:event_clearSearchBarBtnActionPerformed
+
+    private void studentNameDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentNameDisplayActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_studentNameDisplayActionPerformed
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(StudentInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new StudentInterface().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel DescriptionTextPanel;
@@ -1047,9 +1340,7 @@ public class StudentInterface extends javax.swing.JFrame {
     private javax.swing.JPanel SearchStudentsPanel;
     private javax.swing.JPanel ViewAllStudentsPanel;
     private javax.swing.JTextField adminNumberDisplay;
-    private javax.swing.JTextField adminNumberDisplay1;
     private javax.swing.JLabel adminNumberDisplayLabel;
-    private javax.swing.JLabel adminNumberDisplayLabel1;
     private javax.swing.JLabel alStudModMarksLabel;
     private javax.swing.JLabel allStudAdminNum;
     private javax.swing.JTextField allStudAdminNumDisplay;
@@ -1078,21 +1369,31 @@ public class StudentInterface extends javax.swing.JFrame {
     private javax.swing.JPanel allStudentInfoDisplay;
     private javax.swing.JPanel allStudentModuleDisplayPanel;
     private javax.swing.JButton allStudentRefreshBtn;
+    private javax.swing.JButton clearSearchBarBtn;
+    private javax.swing.JButton clearStudDetails;
     private javax.swing.JTextPane displayAllStudentsTextPaneRemarks;
     private javax.swing.JScrollPane displayRemarksScrollPane;
     private javax.swing.JRadioButton filterByClassSearch;
     private javax.swing.JRadioButton filterByNameSearch;
     private javax.swing.JTextField gpaDisplay;
-    private javax.swing.JTextField gpaDisplay1;
     private javax.swing.JLabel gpaDisplayLabel;
-    private javax.swing.JLabel gpaDisplayLabel1;
-    private javax.swing.JLabel gradeLabel;
-    private javax.swing.JTextField gradeLabelDisplay;
+    private javax.swing.JTextField modCodeDisplay;
+    private javax.swing.JLabel modCodeLabel;
     private javax.swing.JButton modCordNext;
     private javax.swing.JButton modCordPrev;
+    private javax.swing.JTextField modCredUnitDisplay;
+    private javax.swing.JLabel modCredUnitLabel;
+    private javax.swing.JTextField modGradeDisplay;
+    private javax.swing.JLabel modGradeLabel;
+    private javax.swing.JTextField modMarksDisplay;
+    private javax.swing.JLabel modMarksLabel;
+    private javax.swing.JTextField modNameDisplay;
+    private javax.swing.JLabel modNameLabel;
     private javax.swing.JPanel moduleDisplayPanel;
+    private javax.swing.JComboBox<String> moduleDropDown;
     private javax.swing.JButton nextBtn;
     private javax.swing.JButton prevBtn;
+    private javax.swing.JPanel printerPanel;
     private javax.swing.JScrollPane remarksScrollPane;
     private javax.swing.JTextPane remarksTextPane;
     private javax.swing.JTextField searchBar;
@@ -1101,14 +1402,11 @@ public class StudentInterface extends javax.swing.JFrame {
     private javax.swing.JLabel searchHeaderText;
     private javax.swing.JPanel searchRemarks;
     private javax.swing.JTextField studentClassDisplay;
-    private javax.swing.JTextField studentClassDisplay1;
     private javax.swing.JLabel studentClassDisplayLabel;
-    private javax.swing.JLabel studentClassDisplayLabel1;
     private javax.swing.JPanel studentDisplayPanel;
+    private javax.swing.JComboBox<String> studentDropdownBtn;
     private javax.swing.JTextField studentNameDisplay;
-    private javax.swing.JTextField studentNameDisplay1;
     private javax.swing.JLabel studentNameDisplayLabel;
-    private javax.swing.JLabel studentNameDisplayLabel1;
     private javax.swing.ButtonGroup studentSearchFilter;
     private javax.swing.JPanel studentSearchResults;
     private javax.swing.JLabel text;

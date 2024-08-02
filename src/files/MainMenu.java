@@ -8,13 +8,30 @@ package files;
  *
  * @author asher
  */
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class MainMenu extends javax.swing.JFrame {
+    
+    private StudentInterface user = new StudentInterface();
+    private StudentManagementGui admin = new StudentManagementGui();
+    private MainMenu menu;
 
     /**
      * Creates new form MainMenu
      */
     public MainMenu() {
         initComponents();
+        
+        this.admin = admin;
+        this.user = user;
+        this.menu = this;
+        
+        // hide the menus when start up
+        admin.setVisible(false);
+        user.setVisible(false);
+        
     }
 
     /**
@@ -26,21 +43,86 @@ public class MainMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        mainMenu = new javax.swing.JPanel();
+        headerPanel = new javax.swing.JPanel();
+        mainMenuHeaderText = new javax.swing.JLabel();
+        queryText = new javax.swing.JLabel();
+        studentBtn = new javax.swing.JButton();
+        staffBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        mainMenu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 838, Short.MAX_VALUE)
+        headerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        mainMenuHeaderText.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        mainMenuHeaderText.setText("Main Menu");
+
+        javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
+        headerPanel.setLayout(headerPanelLayout);
+        headerPanelLayout.setHorizontalGroup(
+            headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainMenuHeaderText, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 454, Short.MAX_VALUE)
+        headerPanelLayout.setVerticalGroup(
+            headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainMenuHeaderText, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        queryText.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        queryText.setText("Are you a student or a admin?");
+
+        studentBtn.setText("Student");
+        studentBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentBtnActionPerformed(evt);
+            }
+        });
+
+        staffBtn.setText("Admin");
+        staffBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout mainMenuLayout = new javax.swing.GroupLayout(mainMenu);
+        mainMenu.setLayout(mainMenuLayout);
+        mainMenuLayout.setHorizontalGroup(
+            mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainMenuLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(mainMenuLayout.createSequentialGroup()
+                        .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainMenuLayout.createSequentialGroup()
+                                .addComponent(studentBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(staffBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(queryText, javax.swing.GroupLayout.PREFERRED_SIZE, 699, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        mainMenuLayout.setVerticalGroup(
+            mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainMenuLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(queryText)
+                .addGap(28, 28, 28)
+                .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(studentBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(staffBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -49,19 +131,36 @@ public class MainMenu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(mainMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(mainMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void studentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentBtnActionPerformed
+        // TODO add your handling code here:
+        
+        
+
+        
+        user.setVisible(true);
+        admin.setVisible(false);
+        menu.setVisible(false);
+    }//GEN-LAST:event_studentBtnActionPerformed
+
+    private void staffBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffBtnActionPerformed
+        // TODO add your handling code here:
+        admin.setVisible(true);
+        user.setVisible(false);
+    }//GEN-LAST:event_staffBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -99,6 +198,11 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel headerPanel;
+    private javax.swing.JPanel mainMenu;
+    private javax.swing.JLabel mainMenuHeaderText;
+    private javax.swing.JLabel queryText;
+    private javax.swing.JButton staffBtn;
+    private javax.swing.JButton studentBtn;
     // End of variables declaration//GEN-END:variables
 }
