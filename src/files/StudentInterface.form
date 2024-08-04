@@ -124,7 +124,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="text" pref="527" max="32767" attributes="0"/>
+                          <Component id="text" pref="549" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -257,11 +257,16 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="allStudGPADisplay" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="allStudGPALabel" alignment="0" pref="37" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="allStudGPALabel" min="-2" pref="37" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="allStudGPADisplay" max="32767" attributes="0"/>
+                                              <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="allStudPrevBtn" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="allStudNextBtn" min="-2" max="-2" attributes="0"/>
@@ -270,14 +275,16 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="allStudNameLabel" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
                                           <Component id="allStudClassLabel" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="allStudClassDisplay" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="allStudAdminNum" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="allStudAdminNumDisplay" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="555" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="allStudDisplayName" min="-2" pref="305" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="allStudAdminNumDisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="allStudClassDisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="allStudDisplayName" alignment="0" pref="305" max="32767" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="studentDropdownBtn" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -323,6 +330,9 @@
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="allStudDisplayNameActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="allStudNameLabel">
                       <Properties>
@@ -436,22 +446,20 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="allStudModNext" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="allStudModMarksDisplay" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="allStudModCode" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="allStudModMarksDisplay" alignment="0" max="32767" attributes="0"/>
                                           <Component id="allStudModLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="allStudModNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="allStudModName" alignment="0" min="-2" pref="166" max="-2" attributes="0"/>
+                                          <Component id="allStudModName" alignment="0" pref="166" max="32767" attributes="0"/>
                                           <Component id="alStudModMarksLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="allStudModCode" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="allStudGradeLabel" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="allStudCreditUnitLabel" alignment="0" min="-2" pref="76" max="-2" attributes="0"/>
-                                          <Component id="allStudGradeDisplay" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="allStudCredUnitDisplay" min="-2" pref="37" max="-2" attributes="0"/>
+                                          <Component id="allStudCreditUnitLabel" min="-2" pref="76" max="-2" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Component id="allStudCredUnitDisplay" min="-2" pref="177" max="-2" attributes="0"/>
                                               <EmptySpace max="32767" attributes="0"/>
                                               <Component id="moduleDropDown" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -476,8 +484,6 @@
                                       <Component id="allStudModName" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="alStudModMarksLabel" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                      <Component id="allStudModMarksDisplay" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
@@ -487,13 +493,11 @@
                                           <Component id="allStudCredUnitDisplay" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="moduleDropDown" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="allStudGradeLabel" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="allStudGradeDisplay" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="113" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="allStudModMarksDisplay" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="135" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="allStudModNext" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="allStudModPrev" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -573,25 +577,11 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="allStudModPrevActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="allStudGradeLabel">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Grade"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="allStudGradeDisplay">
-                      <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
-                        <Property name="text" type="java.lang.String" value="DIST"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="allStudGradeDisplayActionPerformed"/>
-                      </Events>
-                    </Component>
                     <Component class="javax.swing.JComboBox" name="moduleDropDown">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="12">
-                            <StringItem index="0" value="Item 1"/>
+                            <StringItem index="0" value="ST0509"/>
                             <StringItem index="1" value="Item 2"/>
                             <StringItem index="2" value="Item 3"/>
                             <StringItem index="3" value="Item 4"/>
@@ -710,6 +700,7 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="searchFilterPanel" max="32767" attributes="0"/>
                           <Component id="searchRemarks" max="32767" attributes="0"/>
+                          <Component id="avgClassGPAPanel" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -736,7 +727,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="studentSearchResults" max="32767" attributes="0"/>
-                          <Component id="searchRemarks" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="avgClassGPAPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="searchRemarks" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -846,6 +841,12 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="studentDisplayPanel" max="32767" attributes="0"/>
                               <Component id="moduleDisplayPanel" alignment="1" max="32767" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="printerBtn" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="clearStudDetails" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -855,7 +856,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="studentDisplayPanel" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="clearStudDetails" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="printerBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="studentDisplayPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="moduleDisplayPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -892,7 +898,6 @@
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="studentClassDisplayLabel" min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="studentNameDisplay" alignment="0" min="-2" pref="305" max="-2" attributes="0"/>
                                           <Component id="adminNumberDisplayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                               <Component id="adminNumberDisplay" alignment="0" max="32767" attributes="0"/>
@@ -902,9 +907,12 @@
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="studentNameDisplayLabel" min="-2" pref="37" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="studentNameDisplay" alignment="0" min="-2" pref="305" max="-2" attributes="0"/>
+                                          <Component id="studentNameDisplayLabel" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="clearStudDetails" min="-2" max="-2" attributes="0"/>
+                                      <Component id="searchStudentDropdown" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -914,12 +922,17 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="studentNameDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="clearStudDetails" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="studentNameDisplayLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                                      <Component id="studentNameDisplay" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="searchStudentDropdown" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="studentNameDisplay" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="studentClassDisplayLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -943,7 +956,7 @@
                                       <Component id="gpaDisplay" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="11" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1021,13 +1034,15 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prevBtnActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="clearStudDetails">
+                    <Component class="javax.swing.JComboBox" name="searchStudentDropdown">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Clear Details"/>
+                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                          <StringArray count="0"/>
+                        </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearStudDetailsActionPerformed"/>
-                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1051,7 +1066,6 @@
                                       <Component id="modCordPrev" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="modCordNext" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -1064,14 +1078,14 @@
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="modGradeLabel" min="-2" pref="37" max="-2" attributes="0"/>
                                           <Component id="modCredUnitLabel" max="32767" attributes="0"/>
-                                          <Component id="modCredUnitDisplay" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="modGradeDisplay" alignment="0" min="-2" pref="76" max="-2" attributes="0"/>
+                                          <Component id="modCredUnitDisplay" alignment="0" pref="76" max="32767" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                                      <Component id="searchStudentModuleDropdown" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1092,13 +1106,12 @@
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="modCredUnitLabel" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="modCredUnitLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="searchStudentModuleDropdown" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="modCredUnitDisplay" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="modGradeLabel" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="modGradeDisplay" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -1183,22 +1196,37 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modCordPrevActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="modGradeLabel">
+                    <Component class="javax.swing.JComboBox" name="searchStudentModuleDropdown">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Grade"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="modGradeDisplay">
-                      <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
-                        <Property name="text" type="java.lang.String" value="DIST"/>
+                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                          <StringArray count="0"/>
+                        </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modGradeDisplayActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchStudentModuleDropdownActionPerformed"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JButton" name="clearStudDetails">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Clear Details"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearStudDetailsActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="printerBtn">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Export Data"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printerBtnActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JButton" name="searchBtn">
@@ -1266,29 +1294,65 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearSearchBarBtnActionPerformed"/>
               </Events>
             </Component>
-          </SubComponents>
-        </Container>
-        <Container class="javax.swing.JPanel" name="printerPanel">
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Export Data">
-                <Property name="tabTitle" type="java.lang.String" value="Export Data"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
+            <Container class="javax.swing.JPanel" name="avgClassGPAPanel">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Average Class GPA">
+                      <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                        <LineBorder/>
+                      </Border>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+              </Properties>
 
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="870" max="32767" attributes="0"/>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="656" max="32767" attributes="0"/>
-              </Group>
-            </DimensionLayout>
-          </Layout>
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="averageGPALabel" pref="230" max="32767" attributes="0"/>
+                              <Component id="averageGPADisplay" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="averageGPALabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="averageGPADisplay" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="averageGPALabel">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Segoe UI" size="14" style="0"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Average GPA of Class --:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="averageGPADisplay">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="text" type="java.lang.String" value="4.0"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="averageGPADisplayActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
+          </SubComponents>
         </Container>
       </SubComponents>
     </Container>

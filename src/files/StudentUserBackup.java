@@ -89,7 +89,7 @@ public class StudentUserBackup {
         }
     }
 
-    private static void handleEnquiryMenu(int input, StudentManagement sm) {
+    private static void handleEnquiryMenu(int input, StudentManagementBackup sm) {
         switch (input) {
             case 1:
                 sm.displayAllStudents();
@@ -109,7 +109,7 @@ public class StudentUserBackup {
         }
     }
 
-    private static void handleAdminMenu(int input, StudentManagement sm) {
+    private static void handleAdminMenu(int input, StudentManagementBackup sm) {
         switch (input) {
             case 1:
                 sm.addStudent();
@@ -152,7 +152,7 @@ public class StudentUserBackup {
         return input;
     }
     
-    private static void displayPrintOutStudentStatisticMenu(StudentManagement sm) {
+    private static void displayPrintOutStudentStatisticMenu(StudentManagementBackup sm) {
         String display = "";
         int input = 0;
         display = """
@@ -185,7 +185,7 @@ public class StudentUserBackup {
         handlePrintStudentStatisticMenu(input, sm);
     }
     
-    private static void handlePrintStudentStatisticMenu(int input, StudentManagement sm) {
+    private static void handlePrintStudentStatisticMenu(int input, StudentManagementBackup sm) {
         
         Printer print = new Printer();
         

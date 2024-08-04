@@ -11,7 +11,6 @@ package files;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-//import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -46,9 +45,18 @@ public class ScanFile {
         
     }
     
+    private String className;
+    private String adminNum;
+    private String studentName;
+    private Integer numberOfSubjects;
+    private String subjCode;
+    private String subjName;
+    private String subjCreds;
+    private String subjScore;
+    
     public void sectionData() {
         // Split the data into individual records
-        String data = fileContent.toString();
+        String data = fileContent;
         String[] records = data.split("\n");
 
         // Arrays to store the data
@@ -64,11 +72,15 @@ public class ScanFile {
             studentIDs[i] = fields[1];
             studentNames[i] = fields[2];
             numOfSubjects[i] = Integer.parseInt(fields[3]);
-
+            
+            // student general information
             System.out.println("Class: " + classCodes[i]);
             System.out.println("Student ID: " + studentIDs[i]);
             System.out.println("Student Name: " + studentNames[i]);
-            System.out.println("Number of Subjects: " + numOfSubjects[i]);
+            System.out.println("Number of Subjects: " + numOfSubjects[i] + "\n");
+            
+            
+            
 
             int index = 4;
             while (index < fields.length) {
@@ -77,6 +89,7 @@ public class ScanFile {
                 String subjectCredits = fields[index++];
                 String subjectScore = fields[index++];
                 
+                // modules the student is taking
                 System.out.println("Subject Code: " + subjectCode);
                 System.out.println("Subject Name: " + subjectName);
                 System.out.println("Subject Credits: " + subjectCredits);
@@ -84,8 +97,57 @@ public class ScanFile {
             }
 
             System.out.println();
+            
+           
         }
+        
+        
     }
+    
+    
+    
+    
+
+    public String getFileName() {
+        return fileName;
+    }
+
+//    public ArrayList<Student> getStudents() {
+//        return students;
+//    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public String getAdminNum() {
+        return adminNum;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public Integer getNumberOfSubjects() {
+        return numberOfSubjects;
+    }
+
+    public String getSubjCode() {
+        return subjCode;
+    }
+
+    public String getSubjName() {
+        return subjName;
+    }
+
+    public String getSubjCreds() {
+        return subjCreds;
+    }
+
+    public String getSubjScore() {
+        return subjScore;
+    }
+    
     
 
     

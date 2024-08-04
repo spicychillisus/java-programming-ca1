@@ -22,30 +22,10 @@ import java.util.ArrayList;
 public class StudentManagement {
     protected ArrayList<Student> students = new ArrayList<>();
     private ScanFile scan;
-
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
-
-    // Add a method to save student data to file
-    public void saveStudentsToFile(String fileName) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write(String.valueOf(students.size()));
-            writer.newLine();
-            for (Student student : students) {
-                writer.write(student.getStudentClass() + ";" + student.getAdminNumber() + ";" + student.getName() + ";" + student.getModules().size() + ";");
-                for (Module module : student.getModules()) {
-                    writer.write(module.getModuleCode() + ";" + module.getModuleName() + ";" + module.getCreditUnit() + ";" + module.getMarks() + ";");
-                }
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-        }
-    }
-
-
+    
     public StudentManagement() {
+        
+        this.scan = new ScanFile();
         // member A
         // Adding dummy student data
 
@@ -71,6 +51,42 @@ public class StudentManagement {
         student3.calculateGPA();
         students.add(student3);
     }
+    
+    public void getAllStudentsFromFile() {
+        try {
+            scan.fileReader("students.txt");
+            scan.sectionData();
+        } catch (IOException e) {
+            e.getMessage();
+            e.getStackTrace();
+        }
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
+    // Add a method to save student data to file
+    public void saveStudentsToFile(String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write(String.valueOf(students.size()));
+            writer.newLine();
+            for (Student student : students) {
+                writer.write(student.getStudentClass() + ";" + student.getAdminNumber() + ";" + student.getName() + ";" + student.getModules().size() + ";");
+                for (Module module : student.getModules()) {
+                    writer.write(module.getModuleCode() + ";" + module.getModuleName() + ";" + module.getCreditUnit() + ";" + module.getMarks() + ";");
+                }
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    
+    
+
+
+    
 
     public void displayAllStudents() {
         if (students.isEmpty()) {
@@ -142,38 +158,76 @@ public class StudentManagement {
 
         return sb.toString();
     }
+    
+    // ca2
+    public String getStudentDataByName(String searchStudent, ArrayList<Student> studentList) {
+        String studentName = searchStudent.trim();
+        StringBuilder sb = new StringBuilder();
+        boolean found = false;
 
-    public void searchStudentByClass() {
-        String studentClass = JOptionPane.showInputDialog("Enter the class name to search").toUpperCase();
+        try {
+            for (Student student : studentList) {
+                if (student.getName().equalsIgnoreCase(studentName)) {
+                    found = true;
+                    sb.append("Name: ").append(student.getName()).append("\n")
+                        .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                        .append("Class: ").append(student.getStudentClass()).append("\n")
+                        .append("GPA: ").append(student.getGPA()).append("\n");
+
+                    ArrayList<Module> modules = student.getModules();
+                    for (int j = 0; j < modules.size(); j++) {
+                        Module module = modules.get(j);
+                        sb.append(j + 1).append(". ")
+                            .append(module.getModuleCode()).append(" / ")
+                            .append(module.getModuleName()).append(" / ")
+                            .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+                            .append("Marks: ").append(module.getMarks()).append("\n");
+                    }
+                    return sb.toString();
+                }
+            }
+
+            return "No student found with that name";
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            return "Error retrieving student data";
+        }
+    }
+    
+    public Map<String, Student> searchStudentByClass(String searchClass) {
+        String studentClass = searchClass.toUpperCase();
+        Map<String, Student> studentMap = new HashMap<>();
         int studentCount = 0;
         double totalGPA = 0.0;
-        StringBuilder sb = new StringBuilder();
 
         for (Student student : students) {
             if (student.getStudentClass().equalsIgnoreCase(studentClass)) {
                 studentCount++;
                 totalGPA += student.getGPA();
-                sb.append("Name: ").append(student.getName()).append("\n")
-                        .append("Admin: ").append(student.getAdminNumber()).append("\n")
-                        .append("GPA: ").append(student.getGPA()).append("\n")
-                        .append("-----------\n");
+                
+                Map<String, Object> studentDetails = new HashMap<>();
+                studentDetails.put("Student", student);
+                studentDetails.put("Modules", student.getModules());
+                
+                studentMap.put(student.getName(), student);
             }
         }
 
         if (studentCount == 0) {
-            noStudentClass();
-            return;
+            Map<String, Object> noResults = new HashMap<>();
+            noResults.put("Message", "No students found");
+            studentMap.put("No students found", null); // Marker for no results
+        } else {
+            double averageGPA = totalGPA / studentCount;
+            
         }
 
-        double averageGPA = totalGPA / studentCount;
-        sb.append("Number of students in class ").append(studentClass).append(": ").append(studentCount).append("\n")
-                .append("Average GPA: ").append(String.format("%.2f", averageGPA));
-
-        JOptionPane.showMessageDialog(null, sb.toString(), "Class Summary", JOptionPane.INFORMATION_MESSAGE);
+        return studentMap;
     }
-
-    public void searchStudentByName() {
-        String studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
+    
+    // was used in ca1
+    public void searchStudentByName(String studentName) {
+        //String studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
         StringBuilder sb = new StringBuilder();
         boolean found = false;
 
@@ -195,7 +249,6 @@ public class StudentManagement {
                             .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
                             .append("Marks: ").append(module.getMarks()).append("\n");
                 }
-                sb.append("-----------\n");
             }
         }
 
@@ -205,15 +258,6 @@ public class StudentManagement {
         }
 
         JOptionPane.showMessageDialog(null, sb.toString(), "Student Details", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    //  abc ..
-    //  aaa
-    // abc ..
-    //  abc ..
-    //  bbb
-    public int add (int i, int j) {
-        return i * j;
     }
     
     
@@ -264,53 +308,8 @@ public class StudentManagement {
         }
 
     }
-
-    public ArrayList getStudentByName() {
-        String studentName = "";
-        ArrayList data = new ArrayList<>();
-        try {
-            studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
-            StringBuilder sb = new StringBuilder();
-            boolean found = false;
-
-            int index = 0;
-            for (Student student : students) {
-                if (student.getName().equalsIgnoreCase(studentName)) {
-                    found = true;
-                    sb.append("Name: ").append(student.getName()).append("\n")
-                            .append("Admin: ").append(student.getAdminNumber()).append("\n")
-                            .append("Class: ").append(student.getStudentClass()).append("\n")
-                            .append("GPA: ").append(student.getGPA()).append("\n")
-                            .append("Modules Taken:\n");
-
-                    ArrayList<Module> modules = student.getModules();
-                    for (int j = 0; j < modules.size(); j++) {
-                        Module module = modules.get(j);
-                        sb.append(j + 1).append(". ")
-                                .append(module.getModuleCode()).append(" / ")
-                                .append(module.getModuleName()).append(" / ")
-                                .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
-                                .append("Marks: ").append(module.getMarks()).append("\n");
-                    }
-                    sb.append("-----------\n");
-                    data.add(index);
-                }
-                index++;
-            }
-
-            if (!found) {
-                data.add("No student found with that name");
-                return data;
-            }
-
-            data.add(sb.toString());
-            return data;
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "No student found with that name");
-            return data;
-        }
-
-    }
+    
+    
 
     // Member B
     public void addStudent() {
