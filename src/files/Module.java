@@ -21,43 +21,41 @@ public class Module {
         this.creditUnit = creditUnit;
         this.marks = marks;
     }
+    
+    
 
     public String getModuleCode() {
         return moduleCode;
-    }
-
-    public void setModuleCode(String moduleCode) {
-        this.moduleCode = moduleCode;
     }
 
     public String getModuleName() {
         return moduleName;
     }
 
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
-
     public int getCreditUnit() {
         return creditUnit;
+    }
+
+    public double getMarks() {
+        return marks;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
     public void setCreditUnit(int creditUnit) {
         this.creditUnit = creditUnit;
     }
 
-    public void setMarks(int marks) {
+    public void setMarks(double marks) {
         this.marks = marks;
     }
-
-    public double getMarks() {
-        return marks;
-    }
     
-
-    @Override
+        @Override
     public String toString() {
-        return "Module Code: " + moduleCode + ", Module Name: " + moduleName +
+        return "Module Code: " + moduleCode + ", Module Name: " + moduleName + 
                ", Credit Unit: " + creditUnit + ", Marks: " + marks;
     }
 }
+

@@ -17,12 +17,9 @@ import java.util.*;
 public class ScanFile {
     
     private String fileName;
-    private ArrayList<Student> students;
+    //private ArrayList<Student> students;
+    //private StudentManagement sm;
 
-//    public ScanFile() {
-//        this.fileName = fileName;
-//    }
-    
     String fileContent = "";
     
     public void fileReader(String fileName) throws IOException, FileNotFoundException {
@@ -68,10 +65,10 @@ public class ScanFile {
         for (int i = 0; i < records.length; i++) {
             String[] fields = records[i].split(";");
             
-            classCodes[i] = fields[0];
-            studentIDs[i] = fields[1];
-            studentNames[i] = fields[2];
-            numOfSubjects[i] = Integer.parseInt(fields[3]);
+            className = classCodes[i] = fields[0];
+            adminNum = studentIDs[i] = fields[1];
+            studentName = studentNames[i] = fields[2];
+            numberOfSubjects = numOfSubjects[i] = Integer.parseInt(fields[3]);
             
             // student general information
             System.out.println("Class: " + classCodes[i]);
@@ -84,37 +81,30 @@ public class ScanFile {
 
             int index = 4;
             while (index < fields.length) {
-                String subjectCode = fields[index++];
-                String subjectName = fields[index++];
-                String subjectCredits = fields[index++];
-                String subjectScore = fields[index++];
+                subjCode = fields[index++];
+                subjName = fields[index++];
+                subjCreds = fields[index++];
+                subjScore = fields[index++];
                 
                 // modules the student is taking
-                System.out.println("Subject Code: " + subjectCode);
-                System.out.println("Subject Name: " + subjectName);
-                System.out.println("Subject Credits: " + subjectCredits);
-                System.out.println("Subject Score: " + subjectScore);
+                System.out.println("Subject Code: " + subjCode);
+                System.out.println("Subject Name: " + subjName);
+                System.out.println("Subject Credits: " + subjCreds);
+                System.out.println("Subject Score: " + subjScore);
             }
 
             System.out.println();
             
            
         }
-        
-        
     }
     
     
-    
-    
+
 
     public String getFileName() {
         return fileName;
     }
-
-//    public ArrayList<Student> getStudents() {
-//        return students;
-//    }
 
     public String getClassName() {
         return className;

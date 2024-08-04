@@ -4,11 +4,21 @@ package files;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
+
+/**
+ * @author DIT/FT/2B/23 P2323150 Ng Yu Jie
+ */
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class StudentManagementGui extends JFrame {
     private StudentManagement studentManagement = new StudentManagement();
@@ -23,9 +33,24 @@ public class StudentManagementGui extends JFrame {
             System.exit(0);
         });
         gpaField.setEditable(false);
-        resultText.setEditable(false);
+        resultTextArea.setEditable(false);
         radioButtonGroup.add(adminRadioBtn);
         radioButtonGroup.add(nameRadioBtn);
+        radioButtonGroup.add(classRadioBtn);
+        radioButtonGroup.add(gpaRadioBtn);
+        
+         showModulesBtn.addActionListener(e -> {
+            showStudentModules();
+         });
+                 
+            showStudentsBtn.addActionListener(e -> {
+            showAllStudents();
+       });
+           generateReportsBtn.addActionListener(e -> {
+            generateReports();
+        });
+           
+           gpaField.setEnabled(false);
     }
 
     /** 
@@ -37,6 +62,7 @@ public class StudentManagementGui extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        titleTxt = new javax.swing.JLabel();
         studentTxt = new javax.swing.JLabel();
         nameTxt = new javax.swing.JLabel();
         admTxt = new javax.swing.JLabel();
@@ -48,12 +74,20 @@ public class StudentManagementGui extends JFrame {
         marksTxt = new javax.swing.JLabel();
         creditsTxt = new javax.swing.JLabel();
         searchTxt = new javax.swing.JLabel();
+        resultsTxt = new javax.swing.JLabel();
+        numModulesLabel = new javax.swing.JLabel();
+        numModulesValue = new javax.swing.JLabel();
         adminRadioBtn = new javax.swing.JRadioButton();
         nameRadioBtn = new javax.swing.JRadioButton();
-        resultsTxt = new javax.swing.JLabel();
+        classRadioBtn = new javax.swing.JRadioButton();
+        gpaRadioBtn = new javax.swing.JRadioButton();
+        showStudentsBtn = new javax.swing.JButton();
         createStudentBtn = new javax.swing.JButton();
         deleteStudentBtn = new javax.swing.JButton();
+        clearFieldBtn = new javax.swing.JButton();
         addModuleBtn = new javax.swing.JButton();
+        showModulesBtn = new javax.swing.JButton();
+        cancelSearchBtn = new javax.swing.JButton();
         searchBtn = new javax.swing.JButton();
         exitBtn = new javax.swing.JButton();
         nameField = new javax.swing.JTextField();
@@ -66,11 +100,18 @@ public class StudentManagementGui extends JFrame {
         markField = new javax.swing.JTextField();
         searchField = new javax.swing.JTextField();
         resultScrollPane = new javax.swing.JScrollPane();
-        resultText = new javax.swing.JTextArea();
+        resultTextArea = new javax.swing.JTextArea();
+        generateReportsBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("student admin system");
+        setBackground(new java.awt.Color(255, 204, 204));
 
+        titleTxt.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        titleTxt.setText("STUDENT ADMIN SYSTEM");
+        titleTxt.setPreferredSize(new java.awt.Dimension(200, 16));
+
+        studentTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         studentTxt.setText("Student");
 
         nameTxt.setText("Name:");
@@ -81,6 +122,7 @@ public class StudentManagementGui extends JFrame {
 
         gpaTxt.setText("GPA:");
 
+        moduleTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         moduleTxt.setText("Module");
 
         modCodeTxt.setText("Mod Code:");
@@ -91,24 +133,30 @@ public class StudentManagementGui extends JFrame {
 
         creditsTxt.setText("Credit");
 
+        searchTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         searchTxt.setText("Search");
 
-        adminRadioBtn.setText("By Admin");
-        adminRadioBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminRadioBtnActionPerformed(evt);
-            }
-        });
-
-        nameRadioBtn.setText("By Name");
-        nameRadioBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameRadioBtnActionPerformed(evt);
-            }
-        });
-
+        resultsTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         resultsTxt.setText("Results");
 
+        numModulesLabel.setText("Number of Modules:");
+
+        numModulesValue.setText("0");
+
+        adminRadioBtn.setText("By Admin");
+
+        nameRadioBtn.setText("By Name");
+
+        classRadioBtn.setText("By Class");
+
+        gpaRadioBtn.setText("By GPA");
+
+        showStudentsBtn.setBackground(new java.awt.Color(0, 153, 255));
+        showStudentsBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        showStudentsBtn.setText("Show all students");
+
+        createStudentBtn.setBackground(new java.awt.Color(0, 153, 255));
+        createStudentBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         createStudentBtn.setText("Create");
         createStudentBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +164,8 @@ public class StudentManagementGui extends JFrame {
             }
         });
 
+        deleteStudentBtn.setBackground(new java.awt.Color(255, 51, 51));
+        deleteStudentBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         deleteStudentBtn.setText("Delete");
         deleteStudentBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,6 +173,17 @@ public class StudentManagementGui extends JFrame {
             }
         });
 
+        clearFieldBtn.setBackground(new java.awt.Color(255, 255, 0));
+        clearFieldBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        clearFieldBtn.setText("Clear fields");
+        clearFieldBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearFieldBtnActionPerformed(evt);
+            }
+        });
+
+        addModuleBtn.setBackground(new java.awt.Color(0, 153, 255));
+        addModuleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         addModuleBtn.setText("Add");
         addModuleBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,6 +191,26 @@ public class StudentManagementGui extends JFrame {
             }
         });
 
+        showModulesBtn.setBackground(new java.awt.Color(0, 153, 255));
+        showModulesBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        showModulesBtn.setText("Show all modules");
+        showModulesBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showModulesBtnActionPerformed(evt);
+            }
+        });
+
+        cancelSearchBtn.setBackground(new java.awt.Color(255, 51, 51));
+        cancelSearchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        cancelSearchBtn.setText("Cancel");
+        cancelSearchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelSearchBtnActionPerformed(evt);
+            }
+        });
+
+        searchBtn.setBackground(new java.awt.Color(255, 255, 102));
+        searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchBtn.setText("Search");
         searchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,11 +218,23 @@ public class StudentManagementGui extends JFrame {
             }
         });
 
+        exitBtn.setBackground(new java.awt.Color(255, 51, 51));
+        exitBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         exitBtn.setText("Exit");
 
-        resultText.setColumns(20);
-        resultText.setRows(5);
-        resultScrollPane.setViewportView(resultText);
+        gpaField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gpaFieldActionPerformed(evt);
+            }
+        });
+
+        resultTextArea.setColumns(20);
+        resultTextArea.setRows(5);
+        resultScrollPane.setViewportView(resultTextArea);
+
+        generateReportsBtn.setBackground(new java.awt.Color(102, 102, 102));
+        generateReportsBtn.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        generateReportsBtn.setText("Generate report");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,121 +243,153 @@ public class StudentManagementGui extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(nameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(admTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(creditsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(classTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(gpaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(modNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(0, 134, Short.MAX_VALUE)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(admField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(classField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(gpaField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(12, 12, 12)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(markField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(modNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(modCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(studentTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(marksTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(modCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(0, 0, Short.MAX_VALUE)))
-                    .addComponent(moduleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(createStudentBtn)
-                            .addComponent(deleteStudentBtn)
-                            .addComponent(addModuleBtn))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(admTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(creditsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(classTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(gpaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(modNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 34, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(admField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(classField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(gpaField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(markField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(modNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(modCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(marksTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(studentTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(showStudentsBtn))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(moduleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(showModulesBtn))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(numModulesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(numModulesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 12, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addModuleBtn)
+                            .addComponent(deleteStudentBtn)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(clearFieldBtn, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addGap(64, 64, 64)
-                                    .addComponent(resultsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addContainerGap())
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(44, 44, 44)
+                                    .addComponent(createStudentBtn)
+                                    .addGap(96, 96, 96)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(resultScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(adminRadioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(nameRadioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(exitBtn)))
-                                    .addGap(25, 25, 25)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(185, 185, 185))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchBtn))
+                                        .addComponent(resultsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(6, 6, 6)
+                                            .addComponent(resultScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addContainerGap(96, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(generateReportsBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exitBtn)
                         .addGap(49, 49, 49))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(titleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(238, 238, 238))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(classRadioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(gpaRadioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(adminRadioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nameRadioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchBtn)
+                                .addComponent(cancelSearchBtn)))
+                        .addGap(98, 98, 98))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(studentTxt)
-                .addGap(29, 29, 29)
+                .addGap(31, 31, 31)
+                .addComponent(titleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(studentTxt)
+                    .addComponent(searchTxt)
+                    .addComponent(showStudentsBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(adminRadioBtn)
+                    .addComponent(nameRadioBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameTxt)
-                    .addComponent(searchTxt)
                     .addComponent(createStudentBtn)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(classRadioBtn)
+                    .addComponent(gpaRadioBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(admTxt)
-                    .addComponent(adminRadioBtn)
-                    .addComponent(nameRadioBtn)
                     .addComponent(deleteStudentBtn)
-                    .addComponent(admField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(admField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(classTxt)
+                    .addComponent(classField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clearFieldBtn)
+                    .addComponent(searchBtn))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(gpaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(gpaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelSearchBtn))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(classTxt)
-                            .addComponent(classField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(gpaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(gpaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
-                        .addComponent(searchBtn)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
                         .addComponent(resultsTxt)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(resultScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exitBtn))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(moduleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(modCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(modCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(exitBtn)
+                            .addComponent(generateReportsBtn))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(moduleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(showModulesBtn))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(modCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addModuleBtn))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -277,8 +402,11 @@ public class StudentManagementGui extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(creditsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                            .addComponent(creditsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(numModulesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numModulesValue)))))
         );
 
         pack();
@@ -286,43 +414,71 @@ public class StudentManagementGui extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void createStudentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createStudentBtnActionPerformed
-    String name = nameField.getText().trim();
-    String adminNumber = admField.getText().trim();
-    String studentClass = classField.getText().trim();
+       String name = nameField.getText().trim();
+       String adminNumber = admField.getText().trim();
+       String studentClass = classField.getText().trim();
 
-    if (name.isEmpty() || adminNumber.isEmpty() || studentClass.isEmpty()) {
-        showError("Name, Admin Number, and Class are compulsory fields!");
-        return;
-    }
+       // Validate name: must contain only letters and numbers
+       if (!name.matches("[a-zA-Z0-9 ]+")) {
+           showError("Name must contain only letters and numbers.");
+           return;
+       }
 
-    // Check for duplicate admin number
-    for (Student student : studentManagement.getStudents()) {
-        if (student.getAdminNumber().equals(adminNumber)) {
-            showError("A student with this Admin Number already exists!");
-            return;
-              }
-            }
-    Student student = new Student(adminNumber, name, studentClass);
-    studentManagement.getStudents().add(student);
-    clearFields();
-    showMessage("Student created successfully!");
+       // Validate admin number: must contain only letters and numbers
+       if (!adminNumber.matches("[a-zA-Z0-9 ]+")) {
+           showError("Admin Number must contain only letters and numbers.");
+           return;
+       }
+
+       if (name.isEmpty() || adminNumber.isEmpty() || studentClass.isEmpty()) {
+           showError("Name, Admin Number, and Class are compulsory fields!");
+           return;
+       }
+
+       // Check for duplicate admin number
+       for (Student student : studentManagement.getStudents()) {
+           if (student.getAdminNumber().equals(adminNumber)) {
+               showError("A student with this Admin Number already exists!");
+               return;
+           }
+       }
+
+       // Create and add new student
+       Student student = new Student(adminNumber, name, studentClass);
+       studentManagement.getStudents().add(student);
+
+       // Set the newly created student as the selected student
+       selectedStudent = student;
+       showMessage("Student created successfully!");
+       
+       
+       gpaField.setText("0.0");
+          
+       // Make fields non-editable
+       nameField.setEditable(true);
+       admField.setEditable(true);
+       classField.setEditable(true);
     }//GEN-LAST:event_createStudentBtnActionPerformed
     
     private void deleteStudentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentBtnActionPerformed
+    if (selectedStudent == null) {
+        showError("Please search and select a student first!");
+        return;
+    }
 
-        if (selectedStudent == null) {
-            showError("Please search and select a student first!");
-            return;
-        }
+    studentManagement.getStudents().remove(selectedStudent);
+    clearAllFields();
+    showMessage("Student deleted successfully!");
+    selectedStudent = null;
 
-        studentManagement.getStudents().remove(selectedStudent);
-        clearAllFields();
-        showMessage("Student deleted successfully!");
-        selectedStudent = null;
+    // Make fields editable after deleting the student
+    nameField.setEditable(true);
+    admField.setEditable(true);
+    classField.setEditable(true);
     }//GEN-LAST:event_deleteStudentBtnActionPerformed
 
     private void addModuleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addModuleBtnActionPerformed
-        if (selectedStudent == null) {
+     if (selectedStudent == null) {
         showError("Please search and select a student first!");
         return;
     }
@@ -338,75 +494,246 @@ public class StudentManagementGui extends JFrame {
     }
 
     try {
+        // Validate credits: positive integer, no decimals
         int credit = Integer.parseInt(creditStr);
-        int marks = Integer.parseInt(marksStr);
-        Module module = new Module(code, name, credit, marks);
-        selectedStudent.addModule(module);
-        selectedStudent.calculateGPA();
-        gpaField.setText(String.valueOf(selectedStudent.getGPA()));
+        if (credit <= 0) {
+            showError("Credits must be a positive integer.");
+            return;
+        }
+
+        // Validate marks: positive integer or number with at most one decimal point
+        double marks = Double.parseDouble(marksStr);
+        if (marks < 0 || marks > 100) {
+            showError("Marks must be between 0 and 100.");
+            return;
+        }
+
+        if (!marksStr.matches("^\\d+(\\.\\d{1})?$")) {
+            showError("Marks must be a positive integer or a number with at most one decimal point.");
+            return;
+        }
+
+        Module existingModule = null;
+        for (Module module : selectedStudent.getModules()) {
+            if (module.getModuleCode().equalsIgnoreCase(code) && module.getModuleName().equalsIgnoreCase(name)) {
+                existingModule = module;
+                break;
+            }
+        }
+
+        if (existingModule != null) {
+            int response = JOptionPane.showConfirmDialog(this, 
+                "A module with this code and name already exists. Do you want to update its information?", 
+                "Update Module", JOptionPane.YES_NO_OPTION);
+
+            if (response == JOptionPane.NO_OPTION) {
+                return;
+            } else {
+                // Remove the existing module and add the new one with updated information
+                selectedStudent.getModules().remove(existingModule);
+                Module updatedModule = new Module(code, name, credit, marks);
+                selectedStudent.addModule(updatedModule);
+            }
+        } else {
+            // Check for duplicate module code or name
+            for (Module module : selectedStudent.getModules()) {
+                if (module.getModuleCode().equalsIgnoreCase(code)) {
+                    showError("A module with this code already exists!");
+                    return;
+                }
+                if (module.getModuleName().equalsIgnoreCase(name)) {
+                    showError("A module with this name already exists!");
+                    return;
+                }
+            }
+
+            // Add new module
+            Module module = new Module(code, name, credit, marks);
+            selectedStudent.addModule(module);
+        }
+
+        // Update GPA after adding/updating the module
+        double gpa = selectedStudent.getGPA();
+        gpaField.setText(String.valueOf(gpa));
+        
+        checkGPA(selectedStudent);
+
+        // Update the number of modules
+        numModulesValue.setText(String.valueOf(selectedStudent.getModules().size()));
+
         clearModuleFields();
-        showMessage("Module added successfully!");
+        showMessage("Module added/updated successfully!");
     } catch (NumberFormatException e) {
         showError("Invalid input for Credit or Marks!");
-        }
+     }
     }//GEN-LAST:event_addModuleBtnActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
-        String searchTerm = searchField.getText().trim();
-        ArrayList<Student> students = studentManagement.getStudents();
-        ArrayList<Student> matchingStudents = new ArrayList<>();
+    String searchTerm = searchField.getText().trim();
+    ArrayList<Student> students = studentManagement.getStudents();
+    ArrayList<Student> matchingStudents = new ArrayList<>();
 
+    // Determine which radio button is selected
+    if (adminRadioBtn.isSelected()) {
+        // Search by Admin Number
         for (Student student : students) {
-            if ((adminRadioBtn.isSelected() && student.getAdminNumber().equals(searchTerm)) ||
-                (nameRadioBtn.isSelected() && student.getName().equalsIgnoreCase(searchTerm))) {
+            if (student.getAdminNumber().equals(searchTerm)) {
                 matchingStudents.add(student);
             }
         }
-
-        if (matchingStudents.size() == 1) {
-            // Only one student found
-            selectedStudent = matchingStudents.get(0);
-            displayStudent(selectedStudent);
-        } else if (matchingStudents.size() > 1) {
-            // Multiple students found
-            String adminNumber = JOptionPane.showInputDialog(this, 
-                "Multiple students found with this name. Please enter the Admin Number:");
-            if (adminNumber != null && !adminNumber.trim().isEmpty()) {
-                for (Student student : matchingStudents) {
-                    if (student.getAdminNumber().equals(adminNumber.trim())) {
-                        selectedStudent = student;
-                        displayStudent(selectedStudent);
-                        return;
-                    }
-                }
-                showError("No student found with the provided Admin Number.");
-            } else {
-                showError("Admin Number is required to identify the student.");
+    } else if (nameRadioBtn.isSelected()) {
+        // Search by Name
+        for (Student student : students) {
+            if (student.getName().equalsIgnoreCase(searchTerm)) {
+                matchingStudents.add(student);
             }
-        } else {
-            // No student found
-            clearAllFields();
-            resultText.setText("Student cannot be found!");
-            resultScrollPane.revalidate();
-            resultScrollPane.repaint();
         }
+    } else if (classRadioBtn.isSelected()) {
+        // Search by Class
+        for (Student student : students) {
+            if (student.getStudentClass().equalsIgnoreCase(searchTerm)) {
+                matchingStudents.add(student);
+            }
+        }
+    } else if (gpaRadioBtn.isSelected()) {
+        // Search by GPA
+        try {
+            double gpa = Double.parseDouble(searchTerm);
+            for (Student student : students) {
+                if (student.getGPA() == gpa) {
+                    matchingStudents.add(student);
+                }
+            }
+        } catch (NumberFormatException e) {
+            showError("GPA must be a valid number.");
+            return;
+        }
+    } else {
+        showError("Please select a search criterion.");
+        return;
+    }
+
+    // Handle search results
+    if (matchingStudents.size() == 1) {
+        // Only one student found
+        selectedStudent = matchingStudents.get(0);
+        displayStudent(selectedStudent);
+        // Make fields non-editable when student is found
+        nameField.setEditable(false);
+        admField.setEditable(false);
+        classField.setEditable(false);
+    } else if (matchingStudents.size() > 1) {
+        // Multiple students found
+        String adminNumber = JOptionPane.showInputDialog(this, 
+            "Multiple students found. Please enter the Admin Number:");
+        if (adminNumber != null && !adminNumber.trim().isEmpty()) {
+            for (Student student : matchingStudents) {
+                if (student.getAdminNumber().equals(adminNumber.trim())) {
+                    selectedStudent = student;
+                    displayStudent(selectedStudent);
+                    // Make fields non-editable when student is found
+                    nameField.setEditable(false);
+                    admField.setEditable(false);
+                    classField.setEditable(false);
+                    return;
+                }
+            }
+            showError("No student found with the provided Admin Number.");
+        } else {
+            showError("Admin Number is required to identify the student.");
+        }
+    } else {
+        // No student found
+        clearAllFields();
+        resultTextArea.setText("Student cannot be found!");
+        resultScrollPane.revalidate();
+        resultScrollPane.repaint();
+        // Keep fields editable when no student is found
+        nameField.setEditable(true);
+        admField.setEditable(true);
+        classField.setEditable(true);
+     }
     }//GEN-LAST:event_searchBtnActionPerformed
 
-    private void adminRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminRadioBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_adminRadioBtnActionPerformed
+    private void cancelSearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelSearchBtnActionPerformed
+        clearAllFields();
+        nameField.setEditable(true);
+        admField.setEditable(true);
+        classField.setEditable(true);
+        selectedStudent = null;
+        radioButtonGroup.clearSelection();
+    }//GEN-LAST:event_cancelSearchBtnActionPerformed
 
-    private void nameRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameRadioBtnActionPerformed
+    private void clearFieldBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearFieldBtnActionPerformed
+        clearAllFields();
+        nameField.setEditable(true);
+        admField.setEditable(true);
+        classField.setEditable(true);
+        selectedStudent = null;
+    }//GEN-LAST:event_clearFieldBtnActionPerformed
+
+    private void showModulesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showModulesBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameRadioBtnActionPerformed
- 
+    }//GEN-LAST:event_showModulesBtnActionPerformed
+
+    private void gpaFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gpaFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_gpaFieldActionPerformed
+    
+    
+        private void checkGPA(Student student) {
+    if (student.getGPA() < 1.0) {
+        JOptionPane.showMessageDialog(this, 
+            "Warning: " + student.getName() + "'s GPA is below 1.0!", 
+            "Low GPA Alert", 
+            JOptionPane.WARNING_MESSAGE);
+        }
+    }
+        
+    private void showStudentModules() {
+        if (selectedStudent == null) {
+            showError("Please search and select a student first!");
+            return;
+        }
+        
+        StringBuilder modulesInfo = new StringBuilder("Modules for " + selectedStudent.getName() + ":\n");
+        for (Module module : selectedStudent.getModules()) {
+            modulesInfo.append(module).append("\n");
+        }
+
+        resultTextArea.setText(modulesInfo.toString());
+        resultScrollPane.revalidate();
+        resultScrollPane.repaint();
+    }
+    
+    
+    private void showAllStudents() {
+        StringBuilder studentsInfo = new StringBuilder("All Students:\n");
+        for (Student student : studentManagement.getStudents()) {
+            studentsInfo.append(student).append("\n");
+        }
+
+        resultTextArea.setText(studentsInfo.toString());
+        resultScrollPane.revalidate();
+        resultScrollPane.repaint();
+    }
+        
         private void displayStudent(Student student) {
         nameField.setText(student.getName());
         admField.setText(student.getAdminNumber());
         classField.setText(student.getStudentClass());
         gpaField.setText(String.valueOf(student.getGPA()));
+
+        // Update the number of modules label
+        numModulesValue.setText(String.valueOf(student.getModules().size()));
+
         clearModuleFields();
-        resultText.setText(""); // Clear previous results
+        resultTextArea.setText(""); // Clear previous results
+
+        // Disable editing of name, admin, and class fields
+        nameField.setEditable(false);
+        admField.setEditable(false);
+        classField.setEditable(false);
     }
     
     private void clearFields() {
@@ -426,7 +753,7 @@ public class StudentManagementGui extends JFrame {
 
     private void clearAllFields() {
         clearFields();
-        resultText.setText("");
+        resultTextArea.setText("");
     }
 
     private void showError(String message) {
@@ -436,7 +763,81 @@ public class StudentManagementGui extends JFrame {
     private void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
+        
+    //advanced feature
+    private void generateReports() {
+    StringBuilder report = new StringBuilder("Student Reports:\n\n");
+    report.append(generateHighestGPAReport()).append("\n");
+    report.append(generateFailingStudentsReport()).append("\n");
+    report.append(generateClassReports());
 
+    resultTextArea.setText(report.toString());
+    resultScrollPane.revalidate();
+    resultScrollPane.repaint();
+}
+
+private String generateHighestGPAReport() {
+    ArrayList<Student> students = studentManagement.getStudents();
+    if (students.isEmpty()) {
+        return "No students available for generating reports.";
+    }
+
+    Student topStudent = students.get(0);
+    for (Student student : students) {
+        if (student.getGPA() > topStudent.getGPA()) {
+            topStudent = student;
+        }
+    }
+
+    return "Student with the Highest GPA:\n" +
+           "Name: " + topStudent.getName() + "\n" +
+           "Admin Number: " + topStudent.getAdminNumber() + "\n" +
+           "Class: " + topStudent.getStudentClass() + "\n" +
+           "GPA: " + topStudent.getGPA() + "\n";
+}
+
+private String generateFailingStudentsReport() {
+    StringBuilder report = new StringBuilder("Students Failing Any Module:\n");
+    ArrayList<Student> students = studentManagement.getStudents();
+
+    for (Student student : students) {
+        for (Module module : student.getModules()) {
+            if (module.getMarks() < 50) {
+                report.append("Name: ").append(student.getName()).append("\n")
+                      .append("Admin Number: ").append(student.getAdminNumber()).append("\n")
+                      .append("Class: ").append(student.getStudentClass()).append("\n")
+                      .append("Module: ").append(module.getModuleName()).append(" (").append(module.getModuleCode()).append(")\n")
+                      .append("Marks: ").append(module.getMarks()).append("\n\n");
+                break; // Only need to list student once if failing any module
+            }
+        }
+    }
+
+    return report.toString();
+}
+private String generateClassReports() {
+    StringBuilder report = new StringBuilder("Students by Class:\n");
+    ArrayList<Student> students = studentManagement.getStudents();
+    Map<String, List<Student>> classMap = new HashMap<>();
+
+    // Group students by class
+    for (Student student : students) {
+        classMap.computeIfAbsent(student.getStudentClass(), k -> new ArrayList<>()).add(student);
+    }
+
+    // Generate report for each class
+    for (String className : classMap.keySet()) {
+        report.append("Class: ").append(className).append("\n");
+        for (Student student : classMap.get(className)) {
+            report.append("Name: ").append(student.getName()).append("\n")
+                  .append("Admin Number: ").append(student.getAdminNumber()).append("\n")
+                  .append("GPA: ").append(student.getGPA()).append("\n\n");
+        }
+        report.append("\n");
+    }
+
+    return report.toString();
+}
    
     
   private void saveStudentsToFile() {
@@ -484,14 +885,19 @@ public class StudentManagementGui extends JFrame {
     private javax.swing.JTextField admField;
     private javax.swing.JLabel admTxt;
     private javax.swing.JRadioButton adminRadioBtn;
+    private javax.swing.JButton cancelSearchBtn;
     private javax.swing.JTextField classField;
+    private javax.swing.JRadioButton classRadioBtn;
     private javax.swing.JLabel classTxt;
+    private javax.swing.JButton clearFieldBtn;
     private javax.swing.JButton createStudentBtn;
     private javax.swing.JTextField creditField;
     private javax.swing.JLabel creditsTxt;
     private javax.swing.JButton deleteStudentBtn;
     private javax.swing.JButton exitBtn;
+    private javax.swing.JButton generateReportsBtn;
     private javax.swing.JTextField gpaField;
+    private javax.swing.JRadioButton gpaRadioBtn;
     private javax.swing.JLabel gpaTxt;
     private javax.swing.JTextField markField;
     private javax.swing.JLabel marksTxt;
@@ -503,13 +909,18 @@ public class StudentManagementGui extends JFrame {
     private javax.swing.JTextField nameField;
     private javax.swing.JRadioButton nameRadioBtn;
     private javax.swing.JLabel nameTxt;
+    private javax.swing.JLabel numModulesLabel;
+    private javax.swing.JLabel numModulesValue;
     private javax.swing.JScrollPane resultScrollPane;
-    private javax.swing.JTextArea resultText;
+    private javax.swing.JTextArea resultTextArea;
     private javax.swing.JLabel resultsTxt;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchField;
     private javax.swing.JLabel searchTxt;
+    private javax.swing.JButton showModulesBtn;
+    private javax.swing.JButton showStudentsBtn;
     private javax.swing.JLabel studentTxt;
+    private javax.swing.JLabel titleTxt;
     // End of variables declaration//GEN-END:variables
 }
 

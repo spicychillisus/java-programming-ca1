@@ -21,11 +21,12 @@ import java.util.ArrayList;
 
 public class StudentManagement {
     protected ArrayList<Student> students = new ArrayList<>();
-    private ScanFile scan;
+    private ScanFile scan = new ScanFile();
     
     public StudentManagement() {
         
-        this.scan = new ScanFile();
+        this.scan = scan;
+        this.students = students;
         // member A
         // Adding dummy student data
 
@@ -52,14 +53,47 @@ public class StudentManagement {
         students.add(student3);
     }
     
-    public void getAllStudentsFromFile() {
+    private String newStudAdminNum;
+    private String newStudName;
+    private String newStudClass;
+    private String newStudModCode;
+    private String newStudModName;
+    private int newStudCredUnit;
+    private double newStudMarks;
+    
+    public void addStudentDataFromFile() {
         try {
             scan.fileReader("students.txt");
             scan.sectionData();
+            
+            // get the new student variables from the scanfile.java
+            newStudAdminNum = scan.getAdminNum();
+            newStudName = scan.getStudentName();
+            newStudClass = scan.getClassName();
+
+            // get the modules that the student is taking
+            newStudModCode = scan.getSubjCode();
+            newStudModName = scan.getSubjName();
+            newStudCredUnit = Integer.parseInt(scan.getSubjCreds());
+            newStudMarks = Double.parseDouble(scan.getSubjScore());
+            
+            // add new student
+            Student newStudent = new Student(newStudAdminNum, newStudName, newStudClass);
+            newStudent.addModule(new Module(newStudModCode, newStudModName, newStudCredUnit, newStudMarks));
+            students.add(newStudent);
+            
+            
+            System.out.println(newStudAdminNum);
+            System.out.println(students);
+            
+            
         } catch (IOException e) {
             e.getMessage();
-            e.getStackTrace();
         }
+    }
+    
+    public void addNewStudents(String adminNumber, String name, String studentClass, List<Module> modules) {
+        Student newStudent = new Student(adminNumber, name, studentClass);
     }
 
     public ArrayList<Student> getStudents() {
@@ -160,38 +194,53 @@ public class StudentManagement {
     }
     
     // ca2
-    public String getStudentDataByName(String searchStudent, ArrayList<Student> studentList) {
-        String studentName = searchStudent.trim();
-        StringBuilder sb = new StringBuilder();
-        boolean found = false;
-
+    public ArrayList getStudentDataByName(String searchContent, ArrayList<Student> studentList) {
+        String studentName = searchContent.trim();
+        ArrayList data = new ArrayList<>();
         try {
+            //studentName = JOptionPane.showInputDialog("Enter the Student name to search: ").trim();
+            StringBuilder sb = new StringBuilder();
+            boolean found = false;
+    
+
+            int index = 0;
             for (Student student : studentList) {
                 if (student.getName().equalsIgnoreCase(studentName)) {
                     found = true;
                     sb.append("Name: ").append(student.getName()).append("\n")
-                        .append("Admin: ").append(student.getAdminNumber()).append("\n")
-                        .append("Class: ").append(student.getStudentClass()).append("\n")
-                        .append("GPA: ").append(student.getGPA()).append("\n");
-
+                      .append("Admin: ").append(student.getAdminNumber()).append("\n")
+                      .append("Class: ").append(student.getStudentClass()).append("\n")
+                      .append("GPA: ").append(student.getGPA()).append("\n")
+                      .append("Modules Taken:\n");
+    
                     ArrayList<Module> modules = student.getModules();
                     for (int j = 0; j < modules.size(); j++) {
                         Module module = modules.get(j);
                         sb.append(j + 1).append(". ")
-                            .append(module.getModuleCode()).append(" / ")
-                            .append(module.getModuleName()).append(" / ")
-                            .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
-                            .append("Marks: ").append(module.getMarks()).append("\n");
+                          .append(module.getModuleCode()).append(" / ")
+                          .append(module.getModuleName()).append(" / ")
+                          .append("Credit Units: ").append(module.getCreditUnit()).append(" / ")
+                          .append("Marks: ").append(module.getMarks()).append("\n");
                     }
-                    return sb.toString();
+                    data.add(index);
                 }
+                index++;
             }
-
-            return "No student found with that name";
+    
+            if (!found) {
+                data.add("No student found with that name");
+                return data;
+            }
+            
+            data.add(sb.toString());
+            //System.out.println(data);
+            return data;
         } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-            return "Error retrieving student data";
+            JOptionPane.showMessageDialog(null, "No student found with that name");
+            return data;
         }
+        
+       
     }
     
     public Map<String, Student> searchStudentByClass(String searchClass) {

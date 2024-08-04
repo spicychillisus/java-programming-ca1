@@ -30,9 +30,18 @@ public class StudentInterface extends javax.swing.JFrame {
     private ArrayList<Student> allStudents;
     private ArrayList<Module> studModules; // contains the modules each student is taking
     private MainMenu mainMenu;
+    private StudentController controller;
+    
+    private int studIndex = 0;
+    private int modIndex = 0;
+    private double averageGPA;
+    private double totalGPA;
+    private ArrayList<Object> results;
+    private int moduleIndex = 0;
+    
 
     
-    private void clearFieldsOnStartup() {
+    private void initFields() {
         // disable editing
         studentNameDisplay.setEditable(false);
         studentClassDisplay.setEditable(false);
@@ -63,15 +72,22 @@ public class StudentInterface extends javax.swing.JFrame {
         allStudModName.setText("");
         allStudModMarksDisplay.setText("");
         allStudCredUnitDisplay.setText("");
+        
+        remarksTextPane.setEditable(false);
     }
     
     public StudentInterface() {
         initComponents();
         
-        this.scan = new ScanFile();
         this.sm = new StudentManagement();
+        this.scan = new ScanFile();
         
-        clearFieldsOnStartup();
+        
+        this.controller = new StudentController();
+        
+        this.allStudents = sm.getStudents();
+        
+        initFields();
         
         // detect when this window closes
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,6 +119,7 @@ public class StudentInterface extends javax.swing.JFrame {
     private void initComponents() {
 
         studentSearchFilter = new javax.swing.ButtonGroup();
+        jButton4 = new javax.swing.JButton();
         Main = new javax.swing.JTabbedPane();
         HomePanel = new javax.swing.JPanel();
         HomePageTopText = new javax.swing.JLabel();
@@ -139,6 +156,7 @@ public class StudentInterface extends javax.swing.JFrame {
         allStudDisplayRemarksPanel = new javax.swing.JPanel();
         displayRemarksScrollPane = new javax.swing.JScrollPane();
         displayAllStudentsTextPaneRemarks = new javax.swing.JTextPane();
+        allStudRefreshBtn = new javax.swing.JButton();
         SearchStudentsPanel = new javax.swing.JPanel();
         searchHeaderText = new javax.swing.JLabel();
         searchBar = new javax.swing.JTextField();
@@ -181,6 +199,8 @@ public class StudentInterface extends javax.swing.JFrame {
         averageGPALabel = new javax.swing.JLabel();
         averageGPADisplay = new javax.swing.JTextField();
 
+        jButton4.setText("jButton4");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         HomePageTopText.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
@@ -209,7 +229,7 @@ public class StudentInterface extends javax.swing.JFrame {
             DescriptionTextPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DescriptionTextPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(text, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+                .addComponent(text, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -391,7 +411,7 @@ public class StudentInterface extends javax.swing.JFrame {
         allStudCreditUnitLabel.setText("Credit Units");
 
         allStudCredUnitDisplay.setEditable(false);
-        allStudCredUnitDisplay.setText("34");
+        allStudCredUnitDisplay.setText("4");
         allStudCredUnitDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 allStudCredUnitDisplayActionPerformed(evt);
@@ -422,11 +442,6 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(allStudentModuleDisplayPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(allStudModPrev)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(allStudModNext))
-                    .addGroup(allStudentModuleDisplayPanelLayout.createSequentialGroup()
                         .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(allStudModMarksDisplay, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(allStudModLabel, javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,8 +454,13 @@ public class StudentInterface extends javax.swing.JFrame {
                             .addComponent(allStudCreditUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(allStudentModuleDisplayPanelLayout.createSequentialGroup()
                                 .addComponent(allStudCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(moduleDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)
+                                .addComponent(moduleDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, allStudentModuleDisplayPanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(allStudModPrev)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(allStudModNext)))
                 .addContainerGap())
         );
         allStudentModuleDisplayPanelLayout.setVerticalGroup(
@@ -466,7 +486,7 @@ public class StudentInterface extends javax.swing.JFrame {
                             .addComponent(moduleDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(3, 3, 3)
                 .addComponent(allStudModMarksDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
                 .addGroup(allStudentModuleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(allStudModNext)
                     .addComponent(allStudModPrev))
@@ -524,6 +544,15 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        allStudRefreshBtn.setBackground(new java.awt.Color(204, 255, 204));
+        allStudRefreshBtn.setForeground(new java.awt.Color(0, 0, 0));
+        allStudRefreshBtn.setText("Export");
+        allStudRefreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allStudRefreshBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ViewAllStudentsPanelLayout = new javax.swing.GroupLayout(ViewAllStudentsPanel);
         ViewAllStudentsPanel.setLayout(ViewAllStudentsPanelLayout);
         ViewAllStudentsPanelLayout.setHorizontalGroup(
@@ -538,7 +567,9 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(ViewAllStudentsPanelLayout.createSequentialGroup()
                         .addComponent(allStudentHeaderText, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 431, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(allStudRefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(allStudentRefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49))))
         );
@@ -548,7 +579,8 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(ViewAllStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(allStudentHeaderText)
-                    .addComponent(allStudentRefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(allStudentRefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(allStudRefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(ViewAllStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(allStudentInfoDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -707,25 +739,25 @@ public class StudentInterface extends javax.swing.JFrame {
                     .addGroup(studentDisplayPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(searchStudentDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(studentClassDisplayLabel)
-                .addGap(3, 3, 3)
-                .addComponent(studentClassDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(adminNumberDisplayLabel)
-                .addGap(3, 3, 3)
-                .addComponent(adminNumberDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gpaDisplayLabel)
                 .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(studentDisplayPanelLayout.createSequentialGroup()
-                        .addGap(7, 7, 7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(studentClassDisplayLabel)
+                        .addGap(3, 3, 3)
+                        .addComponent(studentClassDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(adminNumberDisplayLabel)
+                        .addGap(3, 3, 3)
+                        .addComponent(adminNumberDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gpaDisplayLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gpaDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(studentDisplayPanelLayout.createSequentialGroup()
+                        .addGap(123, 123, 123)
                         .addGroup(studentDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nextBtn)
-                            .addComponent(prevBtn)))
-                    .addGroup(studentDisplayPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gpaDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(prevBtn))))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
@@ -794,11 +826,6 @@ public class StudentInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(modCordPrev)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(modCordNext))
-                    .addGroup(moduleDisplayPanelLayout.createSequentialGroup()
                         .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(modCodeLabel)
                             .addComponent(modNameLabel)
@@ -811,7 +838,12 @@ public class StudentInterface extends javax.swing.JFrame {
                             .addComponent(modCredUnitLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(modCredUnitDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
                         .addGap(76, 76, 76)
-                        .addComponent(searchStudentModuleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(searchStudentModuleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, moduleDisplayPanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(modCordPrev)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(modCordNext)))
                 .addContainerGap())
         );
         moduleDisplayPanelLayout.setVerticalGroup(
@@ -837,7 +869,7 @@ public class StudentInterface extends javax.swing.JFrame {
                         .addComponent(modCredUnitDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(3, 3, 3)
                 .addComponent(modMarksDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGap(35, 35, 35)
                 .addGroup(moduleDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(modCordNext)
                     .addComponent(modCordPrev))
@@ -1042,16 +1074,6 @@ public class StudentInterface extends javax.swing.JFrame {
         filterByNameSearch.setSelected(false);
     }
     
-    private void getAllData() {
-        // get the data from the students.txt file
-        try {
-            scan.fileReader("students.txt");
-            scan.sectionData();
-        } catch (IOException e) {
-            e.getMessage();
-        }
-        
-    }
     
     private void textTimer(double delay) {
         /**
@@ -1069,35 +1091,10 @@ public class StudentInterface extends javax.swing.JFrame {
             timer.start();
     }
     
-    private boolean checkSearchContent(String searchContent) {
-        
-        boolean textDetected = true;
-        
-        if ("".equals(searchContent)) {
-            // if there is no text in the search bar, return false
-            textTimer(1);
-            
-            textDetected = false;
-            
-        }
-        
-        return textDetected;
-    }
-    
     private String noFilter() {
         String noFilterText = "Please select a filter!";
         return noFilterText;
     }
-    
-//    String studentName = "";
-//    String studentClass = "";
-//    String studentAdminNumber = "";
-//    String studentGPA = "";
-//    String studentModuleCode = "";
-//    String studentModuleName = "";
-//    String studentModuleMarks = "";
-//    String studentModuleCreditUnit = "";
-//    String studentModuleGradeDisplay = "";
     
     String studentNameDisplayFormat = "Details for Student %s has been displayed.";
     String classDisplayFormat = "Details for Class %s has been displayed.";
@@ -1105,23 +1102,15 @@ public class StudentInterface extends javax.swing.JFrame {
     String modDisplayPaneTextFormat = "Module %d out of %d";
     String averageGPALabelText = "Average GPA of Class %s :";
     
-    private int studIndex = 0;
-    private int modIndex;
-    private double averageGPA;
-    private double totalGPA;
-    private ArrayList<Object> results;
-    private int moduleIndex;
+    private String searchContent;
+    private Map<String, Student> studentMap;
     
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
         // TODO add your handling code here:
         // display results based on filter
         // both filters cannot be enabled in the same time
-        String searchContent = searchBar.getText();
-        //sm.getAllStudentsFromFile();
-        //System.out.println(sm.getStudents());
+        searchContent = searchBar.getText();
         
-        allStudents = sm.getStudents();
-        System.out.println(allStudents);
         // info to display if filter search is based on class
         if (filterByClassSearch.isSelected()) {
 
@@ -1131,27 +1120,18 @@ public class StudentInterface extends javax.swing.JFrame {
                 textTimer(6);
             } else {
                 // get class input
-                Map<String, Student> studentMap = sm.searchStudentByClass(searchContent);
+                studentMap = sm.searchStudentByClass(searchContent);
                 if (studentMap.size() == 1 && studentMap.containsKey("No students found")) {
                     remarksTextPane.setText("No students found in the specified class.");
                     clearSearchFields();
                 
                 } else {
                     totalGPA = 0;
-                    Student student = studentMap.values().stream().findFirst().orElse(null);
+                    student = studentMap.values().stream().findFirst().orElse(null);
                     if (student != null) {
                         System.out.println(student);
                         
-//                        for (int i = 0; i < studentMap.size(); i++) {
-//                            studentNameDisplay.setText(student.getName());
-//                            studentClassDisplay.setText(student.getStudentClass());
-//                            adminNumberDisplay.setText(student.getAdminNumber());
-//                            gpaDisplay.setText(String.format("%.2f", student.getGPA()));
-//                            totalGPA += student.getGPA();
-//                            
-//                            //System.out.println(i);
-//                            //studIndex = studentMap.size() - i;
-//                        }
+
                         
                         if (!studentMap.isEmpty() && studIndex >= 0 && studIndex < studentMap.size()) {
                             studentNameDisplay.setText(student.getName());
@@ -1160,7 +1140,7 @@ public class StudentInterface extends javax.swing.JFrame {
                             gpaDisplay.setText(String.format("%.2f", student.getGPA()));
                             totalGPA += student.getGPA();
                             
-                            System.out.println(studIndex);
+                            //System.out.println(studIndex);
                         }
                         
                         //System.out.println(studentMap.size());
@@ -1176,33 +1156,10 @@ public class StudentInterface extends javax.swing.JFrame {
                             modMarksDisplay.setText("");
                             modCredUnitDisplay.setText("");
                             
-                            changeTitledBorderText(moduleDisplayPanel, "Student 0 out of 0");
+                            controller.changeTitledBorderText(moduleDisplayPanel, "Student 0 out of 0");
                             averageGPADisplay.setText("");
                         } else {
                             System.out.println(studModules);
-                            //System.out.println(studModules.get(1).getModuleCode());
-//                            for (moduleIndex = 0; moduleIndex < studModules.size(); moduleIndex++) {
-//                                modCodeDisplay.setText(studModules.get(moduleIndex).getModuleCode());
-//                                modNameDisplay.setText(studModules.get(moduleIndex).getModuleName());
-//                                modMarksDisplay.setText(String.valueOf(studModules.get(moduleIndex).getMarks()));
-//                                modCredUnitDisplay.setText(String.valueOf(studModules.get(moduleIndex).getCreditUnit()));
-//                                //System.out.println(moduleIndex+1);
-//                                //System.out.println(studModules.get(moduleIndex).getModuleCode());
-//                                System.out.println(searchStudentModuleDropdown.getItemCount());
-//                                if (searchStudentModuleDropdown.getItemCount() > 0) {
-//                                    // if there are items in the dropdown, remove them and then add in modules of the next class searched
-//                                    searchStudentModuleDropdown.removeAllItems();
-//                                    searchStudentModuleDropdown.addItem(studModules.get(moduleIndex).getModuleCode());
-//                                } else {
-//                                    searchStudentModuleDropdown.addItem(studModules.get(moduleIndex).getModuleCode());
-//                                }
-//                                
-//                                
-//
-//                                //System.out.println(moduleIndex);
-//                                
-//                                
-//                            }
                             
                             if (!studModules.isEmpty() && moduleIndex >= 0 && moduleIndex < studModules.size()) {
                                 modCodeDisplay.setText(studModules.get(moduleIndex).getModuleCode());
@@ -1231,7 +1188,7 @@ public class StudentInterface extends javax.swing.JFrame {
 
                     remarksTextPane.setText(String.format(classDisplayFormat, searchContent.toUpperCase()));
                     averageGPALabel.setText(String.format(averageGPALabelText, searchContent.toUpperCase()));
-                    changeTitledBorderText(studentDisplayPanel, String.format(
+                    controller.changeTitledBorderText(studentDisplayPanel, String.format(
                             studDisplayPanelTextFormat, 
                             studIndex+1, // this will increase if there are more data
                             studentMap.size()
@@ -1239,7 +1196,7 @@ public class StudentInterface extends javax.swing.JFrame {
                     
 
                     
-                    changeTitledBorderText(moduleDisplayPanel, String.format(
+                    controller.changeTitledBorderText(moduleDisplayPanel, String.format(
                         modDisplayPaneTextFormat,
                         moduleIndex+1, // will increase with more data
                         studModules.size()
@@ -1250,16 +1207,19 @@ public class StudentInterface extends javax.swing.JFrame {
             }
         } else if (filterByNameSearch.isSelected()) {
             if ("".equals(searchContent)) {
+                
+                
                 System.out.println("name search ready but no input!");
                 remarksTextPane.setText("Please enter a student name to search.");
                 textTimer(2);
             } else {
                 // display data based on the name entered
                 // if there are 2 people with the same name, both will be displayed (please remember your own admin number)
-                //System.out.println(allStudents);
-                //System.out.println(allStudents.get(0).getName());
+                allStudents = sm.getStudents();
+                ArrayList<Student> studResults = sm.getStudentDataByName(searchContent, allStudents);
                 
-                
+                remarksTextPane.setText(String.format(studentNameDisplayFormat, searchContent));
+                System.out.println(studResults.get(1).getModules());
                 
                 
             }
@@ -1269,15 +1229,9 @@ public class StudentInterface extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_searchBtnActionPerformed
-   
-    private void changeTitledBorderText(javax.swing.JPanel studentDisplayPanel, String newTitle) {
-        Border border = studentDisplayPanel.getBorder();
-        if (border instanceof TitledBorder) {
-            TitledBorder tb = (TitledBorder) border;
-            tb.setTitle(newTitle);
-            studentDisplayPanel.repaint();
-        }
-    }
+
+    private int currentModIndex;
+    private int currentStudentIndex;
     
     private void studentClassDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentClassDisplayActionPerformed
         // TODO add your handling code here:
@@ -1286,15 +1240,59 @@ public class StudentInterface extends javax.swing.JFrame {
     private void gpaDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gpaDisplayActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_gpaDisplayActionPerformed
-
+    
+    private int currentIndex = 0;
+    private List<Student> studentList = new ArrayList<>();
+    
     private void nextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBtnActionPerformed
         // TODO add your handling code here:
-        System.out.println(++studIndex);
+        if (filterByClassSearch.isSelected()) {
+            try {
+                studentMap = sm.searchStudentByClass(searchContent);
+                studentList = new ArrayList<>(studentMap.values()); // Convert map values to list
+                System.out.println(studentList);
+                if (currentIndex < studentList.size() - 1) {
+                    currentIndex++;
+                    student = studentList.get(currentIndex);
+                    System.out.println(currentIndex);
+
+
+                } 
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.err.println("enter smth");
+            }
+        }
+        
+        
     }//GEN-LAST:event_nextBtnActionPerformed
 
     private void prevBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevBtnActionPerformed
         // TODO add your handling code here:
-        System.out.println(--studIndex);
+        if (filterByClassSearch.isSelected()) {
+            try {
+                studentMap = sm.searchStudentByClass(searchContent);
+                studentList = new ArrayList<>(studentMap.values()); // Convert map values to list
+                // Assume studentMap and studentList have been initialized previously
+                if (studentMap == null || studentList == null) {
+                    System.err.println("Student data is not loaded.");
+                    return;
+                }
+
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    student = studentList.get(currentIndex);
+                    System.out.println("Current index: " + currentIndex);
+                    System.out.println("Displaying student: " + student);
+                } else {
+                    System.out.println("No previous students to display.");
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.err.println("An error occurred: " + e.getMessage());
+            }
+        }
+        
     }//GEN-LAST:event_prevBtnActionPerformed
 
     private void modNameDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modNameDisplayActionPerformed
@@ -1304,15 +1302,63 @@ public class StudentInterface extends javax.swing.JFrame {
     private void modCredUnitDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCredUnitDisplayActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_modCredUnitDisplayActionPerformed
-
+    
+    
+    
     private void modCordNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCordNextActionPerformed
         // TODO add your handling code here:
-        System.out.println(++modIndex);
+        if (modIndex < studModules.size()) {
+            modIndex = modIndex + 1;
+        }
+        
+            int modIndexDisplay = modIndex + 1;
+            try {
+                if (modIndex < studModules.size() && modIndex > -1) {
+                    System.out.println("Module" + modIndex);
+                    controller.changeTitledBorderText(moduleDisplayPanel, String.format(
+                            modDisplayPaneTextFormat, 
+                            modIndexDisplay, 
+                            studModules.size()
+                    ));
+                    System.out.println(studModules.get(modIndex).getModuleCode());
+                }
+
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("no");
+                e.getMessage();
+                e.getStackTrace();
+            }
+        
+        
     }//GEN-LAST:event_modCordNextActionPerformed
 
     private void modCordPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCordPrevActionPerformed
         // TODO add your handling code here:
-        System.out.println(--modIndex);
+        
+        if (modIndex > 0) {
+            modIndex = modIndex - 1;
+        }
+        
+
+        try {
+            if (modIndex <= studModules.size() && modIndex > -1) {
+                System.out.println("Module" + modIndex);
+                
+                int modIndexDisplay = modIndex + 1;
+                
+                controller.changeTitledBorderText(moduleDisplayPanel, String.format(
+                        modDisplayPaneTextFormat, 
+                        modIndexDisplay, 
+                        studModules.size()
+                ));
+                System.out.println(studModules.get(modIndex).getModuleCode());
+            }
+            
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("no");
+            e.getMessage();
+            e.getStackTrace();
+        }
     }//GEN-LAST:event_modCordPrevActionPerformed
 
     private void modMarksDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modMarksDisplayActionPerformed
@@ -1329,11 +1375,38 @@ public class StudentInterface extends javax.swing.JFrame {
 
     private void allStudNextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allStudNextBtnActionPerformed
         // TODO add your handling code here:
-        System.out.println(++currentStudIndex);
+        allStudents = sm.getStudents();
+        System.out.println(currentStudIndex);
+        System.out.println(allStudents);
+        
+        
+        
+        if (currentStudIndex < allStudents.size() && currentStudIndex > -1) {
+            currentStudIndex = currentStudIndex + 1;
+        }
+        
+        int displayStudIndex = currentStudIndex; // index to be displayed in the titled border
+        
+        // change the title border accordingly
+        controller.changeTitledBorderText(allStudentDisplayPanel, String.format("Student %d out of %d", displayStudIndex, allStudents.size()));
     }//GEN-LAST:event_allStudNextBtnActionPerformed
 
     private void allStudPrevBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allStudPrevBtnActionPerformed
         // TODO add your handling code here:
+        allStudents = sm.getStudents();
+        System.out.println(currentStudIndex);
+        System.out.println(allStudents);
+        
+        
+        
+        if (currentStudIndex > 0) {
+            currentStudIndex = currentStudIndex - 1;
+        }
+        
+        int displayStudIndex = currentStudIndex+1; // index to be displayed in the titled border
+        
+        // change the title border accordingly
+        controller.changeTitledBorderText(allStudentDisplayPanel, String.format("Student %d out of %d", displayStudIndex, allStudents.size()));
     }//GEN-LAST:event_allStudPrevBtnActionPerformed
 
     private void allStudModNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allStudModNameActionPerformed
@@ -1356,6 +1429,23 @@ public class StudentInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_allStudModPrevActionPerformed
     
+    private void addNewStudentData() {
+        sm.addStudentDataFromFile();
+    }
+    
+    private void getScannedData() {
+        try {
+            scan.fileReader("students.txt");
+            scan.sectionData();
+            System.out.println(scan.getStudentName());
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+    
+    
+
+    
     private ArrayList<Student> allStudentsArray;
     private int currentStudIndex = 0;
     private int currentStudModIndex = 0;
@@ -1363,32 +1453,42 @@ public class StudentInterface extends javax.swing.JFrame {
     private void allStudentRefreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allStudentRefreshBtnActionPerformed
         // TODO add your handling code here:
         
+        getScannedData();
+        addNewStudentData();
+        
+        
         allStudentsArray = sm.getStudents();
-        System.out.println(allStudentsArray);
+        System.out.println(allStudentsArray.size());
+        //System.out.println(allStudentsArray);
         //currentStudIndex = 0;
         if (!allStudentsArray.isEmpty() && currentStudIndex >= 0 && currentStudIndex < allStudentsArray.size()) {
+            // display data based on the array index
             Student studDisplay = allStudentsArray.get(currentStudIndex);
+            // fill in text fields with relevant data
             allStudDisplayName.setText(studDisplay.getName());
             allStudClassDisplay.setText(studDisplay.getStudentClass());
             allStudAdminNumDisplay.setText(studDisplay.getAdminNumber());
             allStudGPADisplay.setText(String.format("%.2f", studDisplay.getGPA()));
-            changeTitledBorderText(allStudentDisplayPanel, String.format(
+            
+            // change the title border text accordingly
+            controller.changeTitledBorderText(allStudentDisplayPanel, String.format(
                     studDisplayPanelTextFormat, 
                     currentStudIndex + 1,
                     allStudentsArray.size()
             ));
             
+            // display the modules
             Module modDisplay = studDisplay.getModules().get(currentStudIndex);
             allStudModCode.setText(modDisplay.getModuleCode());
             allStudModName.setText(modDisplay.getModuleName());
             allStudModMarksDisplay.setText(String.valueOf(modDisplay.getMarks()));
             allStudCredUnitDisplay.setText(String.valueOf(modDisplay.getCreditUnit()));
-            changeTitledBorderText(allStudentModuleDisplayPanel, String.format(
+            controller.changeTitledBorderText(allStudentModuleDisplayPanel, String.format(
                     modDisplayPaneTextFormat,
                     currentStudModIndex + 1,
                     studDisplay.getModules().size()
             ));
-            System.out.println(studDisplay.getModules().size());
+            
             
         }
         //System.out.println(currentStudIndex);
@@ -1429,8 +1529,8 @@ public class StudentInterface extends javax.swing.JFrame {
     private void clearStudDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearStudDetailsActionPerformed
         // TODO add your handling code here:
         clearSearchFields();
-        changeTitledBorderText(studentDisplayPanel, "Student 0 out of 0");
-        changeTitledBorderText(moduleDisplayPanel, "Student 0 out of 0");
+        controller.changeTitledBorderText(studentDisplayPanel, "Student 0 out of 0");
+        controller.changeTitledBorderText(moduleDisplayPanel, "Student 0 out of 0");
         searchStudentModuleDropdown.removeAllItems();
         averageGPALabel.setText(String.format(averageGPALabelText, "--"));
         
@@ -1482,6 +1582,14 @@ public class StudentInterface extends javax.swing.JFrame {
         
     }//GEN-LAST:event_searchStudentModuleDropdownActionPerformed
 
+    private void allStudRefreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allStudRefreshBtnActionPerformed
+        // TODO add your handling code here:
+        
+        
+        
+    }//GEN-LAST:event_allStudRefreshBtnActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -1547,6 +1655,7 @@ public class StudentInterface extends javax.swing.JFrame {
     private javax.swing.JLabel allStudNameLabel;
     private javax.swing.JButton allStudNextBtn;
     private javax.swing.JButton allStudPrevBtn;
+    private javax.swing.JButton allStudRefreshBtn;
     private javax.swing.JPanel allStudentDisplayPanel;
     private javax.swing.JLabel allStudentHeaderText;
     private javax.swing.JPanel allStudentInfoDisplay;
@@ -1563,6 +1672,7 @@ public class StudentInterface extends javax.swing.JFrame {
     private javax.swing.JRadioButton filterByNameSearch;
     private javax.swing.JTextField gpaDisplay;
     private javax.swing.JLabel gpaDisplayLabel;
+    private javax.swing.JButton jButton4;
     private javax.swing.JTextField modCodeDisplay;
     private javax.swing.JLabel modCodeLabel;
     private javax.swing.JButton modCordNext;
